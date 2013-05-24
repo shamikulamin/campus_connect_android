@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="gainsboro">#DCDCDC</color>
+    <color name="ghostwhite">#FFFFF0</color>  
+    <color name= "darkblue">#00008B</color>  
+    <color name= "black">#000000</color>
+    <color name= "white">#FFFFFF</color>
+</resources>
