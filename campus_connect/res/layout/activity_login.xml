@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" 
+    android:fillViewport="true"
+    tools:context=".MainActivity">
+    
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" android:background="#ffffff">
+    
+	    <!-- Start of Header -->
+	    <LinearLayout android:id="@+id/header"
+	       	android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:background="@layout/header_gradient"
+	        android:paddingTop="5dip"
+	        android:paddingBottom="5dip">
+	        <!-- Logo Start-->
+	        <TextView android:layout_width="wrap_content"
+	                  android:layout_height="wrap_content"
+	                  android:layout_marginLeft="10dip"
+	                  android:text="Campus Connect"
+	                  android:textSize="30sp"
+	                  android:textStyle="bold"
+	                  android:textColor="#ffffff"
+	                  android:shadowColor="#372c24"
+	                  android:shadowDx="1"
+	                  android:shadowDy="1"
+	                  android:shadowRadius="2" />
+	    </LinearLayout>
+	    
+	    <!-- Start of Footer -->
+		<LinearLayout android:id="@+id/footer"
+	                android:layout_width="fill_parent"
+	                android:layout_height="90dip"
+	                android:background="#008AB8"
+	                android:layout_alignParentBottom="true">
+	    </LinearLayout>
+	    
+	    <!-- Start of Login -->
+		<LinearLayout 
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+		    android:padding="10dip" 
+        	android:layout_centerInParent="true"
+		    android:layout_centerVertical="true" 
+			android:layout_gravity="center_vertical"
+		    android:layout_below="@id/header"
+		    android:orientation="vertical">
+	        
+		    <TextView
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:textColor="#372c24"
+		        android:text="UTA ID"/>
+		    
+		    <EditText android:id="@+id/username"
+	        	android:layout_width="fill_parent"
+	            android:layout_height="wrap_content"
+	            android:textColor="#372c24"
+	            android:background="#E6E6E6"
+	            android:padding="3dip"
+	            android:layout_marginTop="5dip"
+	            android:layout_marginBottom="20dip"
+	            android:singleLine="true"
+	    		android:hint="@string/username" />
+		    
+		    <TextView
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:textColor="#372c24"
+		        android:text="Password"/>
+		    
+		   	<EditText android:id="@+id/password"
+	        	android:layout_width="fill_parent"
+	            android:layout_height="wrap_content"
+	            android:layout_marginTop="5dip"
+	            android:layout_marginBottom="20dip"
+	            android:padding="3dip"
+	            android:textColor="#372c24"
+	            android:background="#E6E6E6"
+	            android:singleLine="true"
+	            android:inputType="textPassword"
+	            android:hint="@string/password" />
+		    
+		    <Button android:layout_width="fill_parent"
+		        android:layout_marginTop="10dip"
+		        android:background="#008AB8"
+		        android:layout_height="wrap_content"
+		        android:text="@string/button_login" 
+		        android:onClick="startLoginTask" />
+		</LinearLayout>
+	</RelativeLayout>
+</ScrollView>

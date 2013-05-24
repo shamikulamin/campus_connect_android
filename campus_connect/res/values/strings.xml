@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="hello">Hello World, main!</string>
-    <string name="app_name">campus_connect</string>
+    <string name="app_name">Campus Connect</string>
     <string name="submit_button_text">Report an incident</string>
     <string name="returnMain">Go Back</string>
+    <string name="username">Enter a Username</string>
+    <string name="password">Enter a Password</string>
+    <string name="button_login">Login</string>
 </resources>

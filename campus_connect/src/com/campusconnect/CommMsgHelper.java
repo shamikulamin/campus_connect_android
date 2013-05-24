@@ -4,7 +4,7 @@ import android.util.Log;
 
 public class CommMsgHelper 
 {
-	// remove the comment.
+	
 	public static boolean isParkingMsg(CommunityMsg v)
 	{
 		if(v == null)

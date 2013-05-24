@@ -1,42 +1,34 @@
 package com.campusconnect;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.net.URI;
 
-
+import org.apache.http.conn.ConnectTimeoutException;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Point;
-import android.location.Criteria;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.location.LocationProvider;
 import android.media.MediaScannerConnection;
 import android.media.MediaScannerConnection.MediaScannerConnectionClient;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.provider.MediaStore.Images.Media;
 import android.util.Log;
 import android.view.Display;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.Toast;
+import android.widget.TextView;
 
 public class ReportIncidentActivity extends Activity implements MediaScannerConnectionClient
 {
@@ -64,11 +56,28 @@ public class ReportIncidentActivity extends Activity implements MediaScannerConn
     final String m_sProvider = LocationManager.GPS_PROVIDER;
     private static final int DIALOG_SENDING_REPORT = 0;
     
+    void setHideKeyboard() {
+    	final EditText details = (EditText) findViewById(R.id.msgdetails);
+    	details.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+    		
+	    	@Override
+		    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+		    	if (event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
+		    		InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+	                imm.hideSoftInputFromWindow(details.getWindowToken(), 0);
+	                return true;
+		        }
+		    	return false;
+	    	}
+    	});
+    }
+    
     Activity m_ReportActivity;
     protected void onCreate(Bundle savedInstanceState) 
 	{
 		super.onCreate(savedInstanceState);
         setContentView(R.layout.report_incident_layout);
+        setHideKeyboard();
         
         RemoveStorageDirectory();
         AddStorageDirectory();
@@ -104,18 +113,7 @@ public class ReportIncidentActivity extends Activity implements MediaScannerConn
         vReport.setOnClickListener(new View.OnClickListener() {			
 			public void onClick(View v) 
 			{
-				EditText vEdit = (EditText)findViewById(R.id.msgdetails);				
-				ServerConnector vConnector = new ServerConnector();
-				Location location = m_vLocationManager.getLastKnownLocation(m_sProvider);
-				if(vConnector.sendIncidentMsg(vEdit.getText().toString(), 
-						System.currentTimeMillis(), location, getImageDir()))
-				{
-					displaySuccessMsg();						
-				}
-				else
-				{
-					displayErrorMsg();								
-				}
+				startSendIncReportTask();//sendReport();
 			}
 		});
         
@@ -129,6 +127,28 @@ public class ReportIncidentActivity extends Activity implements MediaScannerConn
 		});
         
 	}
+    
+    private boolean sendReport() throws ConnectTimeoutException {
+    	try {
+    		/* Get SharedPreferences to see if we already have set a user/pass combo */
+	    	SharedPreferences sp = this.getSharedPreferences("prefs", Context.MODE_PRIVATE);
+	    	
+	    	/* Variable stored in SharedPreference: uid = encrypted UTA ID, p = encrypted UTA password */
+	    	String enc_user = sp.getString("uid", "");
+	    	String enc_pass = sp.getString("p", "");
+	    	EditText vEdit = (EditText)findViewById(R.id.msgdetails);
+			ServerConnector vConnector = new ServerConnector(ReportIncidentActivity.this);
+			Location location = m_vLocationManager.getLastKnownLocation(m_sProvider);
+			return vConnector.sendIncidentMsg(vEdit.getText().toString(), enc_user, enc_pass, System.currentTimeMillis(), location, getImageDir());
+			/*if(vConnector.sendIncidentMsg(vEdit.getText().toString(), System.currentTimeMillis(), location, getImageDir())) {
+				displaySuccessMsg();						
+			} else {
+				displayErrorMsg();								
+			}*/
+    	} catch( ConnectTimeoutException e ) {
+    		throw e;
+    	}
+    }
    
     public void displaySuccessMsg()
     {
@@ -397,6 +417,89 @@ public class ReportIncidentActivity extends Activity implements MediaScannerConn
 	        conn.disconnect();
 	        conn = null;
 	    }
-	 }
+	}
+	
+	private void dispServerDown() {
+		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+
+		// set title
+		alertDialogBuilder.setTitle("Server is Down");
+
+		// set dialog message
+		alertDialogBuilder.setMessage("Oops...it appears the server is currently down!\n\nPlease try again later...")
+						  .setCancelable(false)
+						  .setNeutralButton("OK",new DialogInterface.OnClickListener() {
+							  public void onClick(DialogInterface dialog,int id) {
+							  		dialog.cancel();	// if this button is clicked, close dialog
+							  		//startLoginActivity(false);
+							  }
+						  });
+
+			// create alert dialog
+			AlertDialog alertDialog = alertDialogBuilder.create();
+
+			// show it
+			alertDialog.show();
+	}
+	
+	 /** Called to send report over network */
+    private void startSendIncReportTask() {        
+    	
+        /* Set up a progress dialog for waiting while sending report */
+    	//ProgressDialog dialog = new ProgressDialog(this);
+    	//dialog.setIcon(R.drawable.ic_launcher);
+    	//dialog.setTitle("Sending Report...");
+    	//dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+    	ProgressDialog dialog = ProgressDialog.show( this, "Sending Report...", "Please wait...", true);
+    	
+    	/* Attempt to send report in a separate thread */
+    	SendIncReportTask lt = new SendIncReportTask(dialog);
+		lt.execute();
+    }
+    
+    /**
+     * This inner class is used to send report with a nice looking Progress Dialog
+     * */
+    private class SendIncReportTask extends AsyncTask<Void, Integer, Boolean> {
+    	private ProgressDialog progressDialog = null;
+    	private boolean serverDown = false;
+    	 
+    	public SendIncReportTask(ProgressDialog progressDialog)
+    	{
+    		this.progressDialog = progressDialog;
+    	}
+    	
+    	@Override
+    	protected Boolean doInBackground(Void... params) {
+    		boolean sent = false;
+			try {
+				sent = sendReport();
+			} catch (ConnectTimeoutException e) {
+				serverDown = true;
+			}
+			return sent;
+    	}
+
+    	@Override
+    	protected void onPreExecute() {
+    		progressDialog.show();	// Show Progress Dialog before executing authentication
+    	}
+
+    	@Override
+    	protected void onPostExecute(Boolean result) {
+    		 progressDialog.dismiss();	// Hide Progress Dialog after executing authentication
+    		 if( serverDown ) {
+    			 dispServerDown();
+    			 serverDown = false;
+    			 //startLoginActivity(false);
+    		 } else {
+    			if( result.booleanValue() ) {
+    				 displaySuccessMsg();						
+ 				} else {
+ 					displayErrorMsg();	
+ 				}
+    		 }
+    	}
+     }
 
 }
