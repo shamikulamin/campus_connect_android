@@ -31,7 +31,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 	}
 
 	/* These constants uniquely identify types of notifications e.g.(PARKING_NOTIFICATION, CRIME_NOTIFICATION, ...etc)*/
-	private static final int TEST_NOTIFICATION = 1;
+	private static int notificationNum = 1;
 	private static final String IP_Address = "129.107.116.135";
 	
 	@Override
@@ -76,7 +76,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 		
 		Notification n = mBuilder.build();
 		n.flags |= Notification.FLAG_AUTO_CANCEL;
-		nm.notify(TEST_NOTIFICATION, n);
+		nm.notify(notificationNum+=1, n);
 	}
 
 	@Override
