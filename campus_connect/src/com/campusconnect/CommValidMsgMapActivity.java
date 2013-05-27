@@ -144,6 +144,7 @@ public class CommValidMsgMapActivity extends FragmentActivity  {
     
     private void setMapView() {
     	if( mMarkers.size() == 0 ) {
+    		bounds = defaultBounds;
     		mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(defaultBounds, 5));
     		dispNoMarkers();
     	} else {
