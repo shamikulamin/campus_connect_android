@@ -27,6 +27,15 @@ public class ServerConnector
 		}
 	}
 	
+	public CommunityMsg getCommunityMsgById( int msgID ) throws ConnectTimeoutException
+	{
+		try {
+			return man.getCommunityMsgById(msgID);
+		} catch (ConnectTimeoutException e) {
+			throw e;
+		}
+	}
+	
 	public ArrayList<CommunityMsg> getCommunityMsg() throws ConnectTimeoutException
 	{
 		try {

@@ -40,6 +40,7 @@ public class CommValidMsgMapActivity extends FragmentActivity  {
         setContentView(R.layout.comm_valid_msg_map);
         setUpMapIfNeeded();
         CommunityMsg vCommMsgToBeShown = getIntent().getParcelableExtra("CommMsgObject");
+        
         if(vCommMsgToBeShown != null)
         {
         	vCommMsgToBeShown.setLatLong(stripParenthesis(vCommMsgToBeShown));
@@ -232,7 +233,7 @@ public class CommValidMsgMapActivity extends FragmentActivity  {
 	    /**
 	     * This inner class is used to get messages with a nice looking Progress Dialog
 	     * */
-	    private class GetCommuMapMsgsTask extends AsyncTask<Void, Integer, Void> {
+	    private class GetCommuMapMsgsTask extends AsyncTask<Void, Void, Void> {
 	    	private ProgressDialog progressDialog = null;
 	    	private boolean serverDown = false;
 	    	 

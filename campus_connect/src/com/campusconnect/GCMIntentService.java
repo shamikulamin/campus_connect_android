@@ -25,14 +25,14 @@ import com.google.android.gcm.GCMBaseIntentService;
 
 public class GCMIntentService extends GCMBaseIntentService {
 	private static final String SENDER_ID = "507557004717";	// This is a constant provided by Google which uniquely identifies the application
+	private static int notificationNum = 1;
+	private static final String IP_Address = "129.107.116.135";
 	
 	public GCMIntentService(){
 		super(SENDER_ID);
 	}
 
-	/* These constants uniquely identify types of notifications e.g.(PARKING_NOTIFICATION, CRIME_NOTIFICATION, ...etc)*/
-	private static int notificationNum = 1;
-	private static final String IP_Address = "129.107.116.135";
+
 	
 	@Override
 	protected void onError(Context context, String regId) {
@@ -42,27 +42,16 @@ public class GCMIntentService extends GCMBaseIntentService {
 
 	@Override
 	protected void onMessage(Context context, Intent intent) {
-		Intent vMsgDetailIntent = null;
+		Intent vMsgDetailIntent = new Intent(context, StartScreen.class);
 		String title = intent.getStringExtra("title");
-		String desc = intent.getStringExtra("text");
+		int iMsgID = Integer.parseInt(intent.getStringExtra("msgID"));
 		String msgType = intent.getStringExtra("msgType");
 		
 		/* This method receives intent sent from server */
-		String loc = intent.getStringExtra("location");
-		if(loc != null && !loc.equals("") )
-		{
-			vMsgDetailIntent = new Intent(Intent.ACTION_MAIN);
-			vMsgDetailIntent.setClass(context, CommValidMsgMapActivity.class);
-			vMsgDetailIntent.putExtra("CommMsgObject", new CommunityMsg(msgType,title,desc,loc));
-		}
-		else
-		{
-			vMsgDetailIntent = new Intent(Intent.ACTION_MAIN);
-			vMsgDetailIntent.setClass(context, ComMsgDetailsActivity.class);
-			vMsgDetailIntent.putExtra("pushMSG", new CommunityMsg(msgType,title,desc,null));
-		}	
-		
-		PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, vMsgDetailIntent, 0);	//---PendingIntent to launch activity if the user selects this notification---
+		vMsgDetailIntent.putExtra("bPush", true);
+		vMsgDetailIntent.putExtra("msg_id",iMsgID);
+		vMsgDetailIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+		PendingIntent pendingIntent = PendingIntent.getActivity(context,(int)System.currentTimeMillis(), vMsgDetailIntent, PendingIntent.FLAG_UPDATE_CURRENT);	//---PendingIntent to launch activity if the user selects this notification---
 		NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 		
 		NotificationCompat.Builder mBuilder =
@@ -70,13 +59,14 @@ public class GCMIntentService extends GCMBaseIntentService {
 		        .setSmallIcon(R.drawable.ic_launcher)
 		        .setContentIntent(pendingIntent)
 		        .setWhen(System.currentTimeMillis())
-				.setContentTitle(title)
-		        .setContentText(desc)
+				.setContentTitle(msgType+": "+title)
+		        //.setContentText(desc)
 				.setVibrate(new long[] { 100, 250, 100, 500});	//---100ms delay, vibrate for 250ms, pause for 100 ms and then vibrate for 500ms---
 		
 		Notification n = mBuilder.build();
 		n.flags |= Notification.FLAG_AUTO_CANCEL;
-		nm.notify(notificationNum+=1, n);
+		nm.notify(notificationNum, n);
+		notificationNum+=1;
 	}
 
 	@Override

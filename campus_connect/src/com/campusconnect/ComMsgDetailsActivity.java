@@ -1,3 +1,5 @@
+// This class is responsible to display the community message without a location.
+
 package com.campusconnect;
 
 
@@ -15,14 +17,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+
 public class ComMsgDetailsActivity extends Activity {
 	
 	private ServerConnector vConnector;
-	
-	//public ComMsgDetailsActivity() {
-	//	vConnector = new ServerConnector(this);
-	//}
-	
+		
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +37,7 @@ public class ComMsgDetailsActivity extends Activity {
         		finish();
         	}
         });
+        
         if( msgID == -1 ) {	// This only occurs when this activity is started from clicking a push notification
         	CommunityMsg msg = getIntent().getParcelableExtra("pushMSG");
         	TextView textView = (TextView) findViewById(R.id.msgdetails);

@@ -2,6 +2,7 @@ package com.campusconnect;
 
 import android.util.Log;
 
+// This is a helper class to identify the type of community messages. 
 public class CommMsgHelper 
 {
 	

@@ -64,6 +64,68 @@ public class SSLManager {
 		return response;
 	}
 	
+	public CommunityMsg getCommunityMsgById( int msgID ) throws ConnectTimeoutException
+	{
+		CommunityMsg comMsg = new CommunityMsg();
+		try {
+			String response = getResponse("get","getMsgById@" + msgID);
+			//JSONArray jsonArray = new JSONArray(response);
+			//Log.i(ServerConnector.class.getName(),
+			//		"Number of entries " + jsonArray.length());
+			//for (int i = 0; i < jsonArray.length(); i++) {
+				JSONObject jsonObject =  new JSONObject(response);
+				
+				//CommunityMsg comMsg = new CommunityMsg();
+				if(jsonObject.has("comm_msg_id"))
+					comMsg.setCommMsgId(jsonObject.getInt("comm_msg_id"));
+				else
+				{
+					// this should not happen as its the primary key.
+					comMsg.setCommMsgId(-1);
+					
+				}
+				if(jsonObject.has("msg_type"))
+				{
+					comMsg.setMsgType(jsonObject.getString("msg_type"));					
+				}
+				else
+					comMsg.setMsgType(null);
+				
+				if(jsonObject.has("latlong"))					
+					comMsg.setLatLong(jsonObject.getString("latlong"));
+				else
+					comMsg.setLatLong(null);
+				
+				if(jsonObject.has("msg_description"))
+					comMsg.setMsgDescription(jsonObject.getString("msg_description"));
+				else
+					comMsg.setMsgDescription(null);
+				
+				if(jsonObject.has("msg_title"))
+					comMsg.setMsgTitle(jsonObject.getString("msg_title"));
+				else
+					comMsg.setMsgTitle(null);
+				
+				if(jsonObject.has("reporting_time"))
+					comMsg.setReportingTime(jsonObject.getString("reporting_time"));
+				else
+					comMsg.setReportingTime(null);
+						
+				if(jsonObject.has("expiry_time"))
+					comMsg.setExpiryTime(jsonObject.getString("reporting_time"));
+				else
+					comMsg.setExpiryTime(null);
+				
+				//asRet.add(comMsg);
+			//}
+		} catch (ConnectTimeoutException e) {
+			throw e;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return comMsg;
+	}
+	
 	public ArrayList<CommunityMsg> getCommunityMsg() throws ConnectTimeoutException
 	{
 		ArrayList<CommunityMsg> asRet = new ArrayList<CommunityMsg>();

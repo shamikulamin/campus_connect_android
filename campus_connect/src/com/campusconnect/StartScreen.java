@@ -5,6 +5,7 @@ import org.apache.http.conn.ConnectTimeoutException;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -25,7 +26,10 @@ public class StartScreen extends Activity {
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        checkLogin();
+        boolean bPushNotif = getIntent().getBooleanExtra("bPush", false);
+     	int iMsgID = getIntent().getIntExtra("msg_id", -1);
+    	
+        checkLogin(bPushNotif, iMsgID, this);
         setContentView(R.layout.start_screen);
         
         Button showMapBtn = (Button) findViewById(R.id.show_in_map);
@@ -54,22 +58,24 @@ public class StartScreen extends Activity {
         		startActivity(reportIncident);
             }
         });
+        
 	}
 	
 	/**
      * See if user has valid login credentials saved. If so then log them in, otherwise launch login activity
      * */
-    private void checkLogin() {
+    private void checkLogin(boolean bPush, int iMsgID, Context ctx ) {
     	String enc_user = null, enc_pass = null;
     	
     	/* Get SharedPreferences to see if we already have set a user/pass combo */
     	SharedPreferences sp = this.getSharedPreferences("prefs", MODE_PRIVATE);
     	
+    	// We do not pass the push notification parameters to startLoginActivity() since it will be called only once at the first time after installing.
     	/* Variable stored in SharedPreference: uid = encrypted UTA ID, p = encrypted UTA password */
     	if( (enc_user = sp.getString("uid", null)) == null || (enc_pass = sp.getString("p", null)) == null ) {
     		startLoginActivity(false);
     	} else {
-    		startStoredCredentialsLoginTask(enc_user,enc_pass);	// Check if stored UTA ID and Password are valid
+    		startStoredCredentialsLoginTask(enc_user,enc_pass, bPush, iMsgID, ctx);	// Check if stored UTA ID and Password are valid
     	}
     }
     
@@ -150,16 +156,23 @@ public class StartScreen extends Activity {
 		// show it
 		alertDialog.show();
 	}
+	
+	private CommunityMsg getCommMsgFromPush( int msgID, Context ctx ) throws ConnectTimeoutException {
+		ServerConnector vServConn = new ServerConnector(ctx);
+		CommunityMsg vRet = vServConn.getCommunityMsgById(msgID);
+		return vRet;
+	}
     
     /** Called every time the app starts to check credentials */
-    private void startStoredCredentialsLoginTask(String enc_uid, String enc_pass) {        
+    private void startStoredCredentialsLoginTask(String enc_uid, String enc_pass, boolean bPush, int iMsgID, Context ctx) {        
     	
         /* Set up a progress dialog for waiting while logging in */
     	ProgressDialog dialog = ProgressDialog.show( this, "Logging In...", "Please wait...", true);
     	
     	/* Attempt to login in a separate thread */
-    	StoredCredentialsLoginTask lt = new StoredCredentialsLoginTask(dialog);
+    	StoredCredentialsLoginTask lt = new StoredCredentialsLoginTask(dialog, bPush, iMsgID, ctx);
 		lt.execute(enc_uid, enc_pass);
+		
     }
     
     /**
@@ -169,10 +182,17 @@ public class StartScreen extends Activity {
     	private ProgressDialog progressDialog = null;
     	private boolean serverDown = false;
     	private boolean update = false;
-    	 
-    	public StoredCredentialsLoginTask(ProgressDialog progressDialog)
+    	private boolean m_bPush = false;
+    	private int m_iMsgID = -1;
+    	private Context ctx = null;
+    	private CommunityMsg m_vPushedComMsg = null;
+    	
+    	public StoredCredentialsLoginTask(ProgressDialog progressDialog, boolean bPush, int iMsgID, Context ctx)
     	{
     		this.progressDialog = progressDialog;
+    		m_bPush = bPush;
+    		m_iMsgID = iMsgID;
+    		this.ctx = ctx;
     	}
     	
     	@Override
@@ -183,6 +203,29 @@ public class StartScreen extends Activity {
     		boolean valid = false;
 			try {
 				valid = new Authenticator(enc_uid, enc_pass, getBaseContext()).authenticate();
+				if( valid ) {
+					if( m_bPush ) {
+			        	//checkLogin(msgID);
+			        	Intent vMsgDetailIntent = null;
+			        	m_vPushedComMsg = getCommMsgFromPush(m_iMsgID,ctx);
+			        	/* Check if this msg has a location */
+			    		String loc = m_vPushedComMsg.getLatLong();//intent.getStringExtra("location");
+			    		if( loc != null )//loc != null && !loc.equals("") )
+			    		{
+			    			vMsgDetailIntent = new Intent(ctx,CommValidMsgMapActivity.class);
+			    			//vMsgDetailIntent.setClass(this, CommValidMsgMapActivity.class);
+			    			vMsgDetailIntent.putExtra("CommMsgObject", m_vPushedComMsg);
+			    		}
+			    		else
+			    		{
+			    			vMsgDetailIntent = new Intent(ctx, ComMsgDetailsActivity.class);
+			    			//vMsgDetailIntent.setClass(this, ComMsgDetailsActivity.class);
+			    			vMsgDetailIntent.putExtra("pushMSG", m_vPushedComMsg);
+			    		}
+			    		vMsgDetailIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+			    		startActivity(vMsgDetailIntent);
+			        }  
+				}
 			} catch (ConnectTimeoutException e) {
 				serverDown = true;
 				return false;
@@ -209,7 +252,7 @@ public class StartScreen extends Activity {
     			 dispUpdateNotif();
     			 update = false;
     		 } else {
-	    		 if( result.booleanValue() == false ) {
+    			 if( result.booleanValue() == false ) {
 	    			 startLoginActivity(true);	// Credentials are no longer valid so ask the user for correct credentials again
 	    		 }
 	    		pushNotificationRegister();		// Make sure user is registered for Push Notifications
