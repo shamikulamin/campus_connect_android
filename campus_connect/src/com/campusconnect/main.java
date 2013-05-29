@@ -207,7 +207,7 @@ public class main extends Activity {
     						
     						if(hasCommMsgLocation(m_ComMsgID.get(iPos)))
     						{
-    							Intent vMsgDetailIntent = new Intent(main.this, CommValidMsgMapActivity.class);
+    							Intent vMsgDetailIntent = new Intent(main.this, ComMsgMapDetailsActivity.class);
     							vMsgDetailIntent.putExtra("CommMsgObject", m_asCommAlerts.get(iPos));						
     							startActivity(vMsgDetailIntent);
     						}

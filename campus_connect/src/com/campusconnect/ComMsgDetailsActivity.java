@@ -32,13 +32,12 @@ public class ComMsgDetailsActivity extends Activity {
         Button b = (Button) findViewById(R.id.btnReturnToMain);
         b.setOnClickListener(new View.OnClickListener() {
         	public void onClick(View arg0) {
-        		/*Intent i = new Intent(ShowLocationActivity.this, SecondActivity.class);
-        		startActivity(i);*/
         		finish();
         	}
         });
         
-        if( msgID == -1 ) {	// This only occurs when this activity is started from clicking a push notification
+        // This only occurs when this activity is started from clicking a push notification
+        if( msgID == -1 ) {	
         	CommunityMsg msg = getIntent().getParcelableExtra("pushMSG");
         	TextView textView = (TextView) findViewById(R.id.msgdetails);
         	textView.setMovementMethod(new ScrollingMovementMethod());
@@ -121,12 +120,12 @@ public class ComMsgDetailsActivity extends Activity {
 
 	    	@Override
 	    	protected void onPreExecute() {
-	    		progressDialog.show();	// Show Progress Dialog before executing authentication
+	    		progressDialog.show();	// Show Progress Dialog before going into doInBackground()
 	    	}
 
 	    	@Override
 	    	protected void onPostExecute(String res) {
-	    		 progressDialog.dismiss();	// Hide Progress Dialog after executing authentication
+	    		 progressDialog.dismiss();	// Hide Progress Dialog after  doInBackground() finishes
 	    		 if( serverDown ) {
 	    			 dispServerDown();
 	    			 serverDown = false;

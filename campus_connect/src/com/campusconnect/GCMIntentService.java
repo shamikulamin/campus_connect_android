@@ -66,6 +66,8 @@ public class GCMIntentService extends GCMBaseIntentService {
 		Notification n = mBuilder.build();
 		n.flags |= Notification.FLAG_AUTO_CANCEL;
 		nm.notify(notificationNum, n);
+		if(notificationNum >= Integer.MAX_VALUE - 1)
+			notificationNum = 0;
 		notificationNum+=1;
 	}
 

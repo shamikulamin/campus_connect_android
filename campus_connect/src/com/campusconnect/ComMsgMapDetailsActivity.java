@@ -24,21 +24,36 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class CommValidMsgMapActivity extends FragmentActivity  {
+public class ComMsgMapDetailsActivity extends FragmentActivity  {
 	private GoogleMap mMap;
     private ServerConnector m_vServer;
     private ArrayList<CommunityMsg> m_vActiveMsg;
     private ArrayList<Marker> mMarkers;
-    private static final double defaultLat = 32.730641, defaultLong = -97.114597;
-    private static final LatLngBounds defaultBounds = new LatLngBounds(new LatLng(32.72963871873095,-97.11575031280518), new LatLng(32.73046905458073,-97.11193084716797));
-	private static LatLngBounds bounds = null;
+    
+    //private static final double defaultLat = 32.730641, defaultLong = -97.114597;
+    
+    
+    private static  final double UTA_SOUTHWEST_LAT = 32.72963871873095;
+    private static  final double UTA_SOUTHWEST_LONG = -97.11575031280518;
+    private static final double UTA_NORTHEAST_LAT = 32.73046905458073;
+    private static final double UTA_NORTHEAST_LONG = -97.11193084716797;
+    
+    private static final LatLngBounds defaultBounds = 
+    		new LatLngBounds(new LatLng(UTA_SOUTHWEST_LAT, UTA_SOUTHWEST_LONG), new LatLng(UTA_NORTHEAST_LAT, UTA_NORTHEAST_LONG)); //set the mapview to the UTA campus
+	
+    // The currentBounds will be updated based on the location of the posted messages.
+    private static LatLngBounds currentBounds = null;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);  // Suppress title bar for more space
         setContentView(R.layout.comm_valid_msg_map);
+        
         setUpMapIfNeeded();
+        
+        // We set the "CommMsgObject" parameter with the CommunityMsg object whenever we want to display a specific 
+        // message on the map, i.e., from the list view or through a push notification.
         CommunityMsg vCommMsgToBeShown = getIntent().getParcelableExtra("CommMsgObject");
         
         if(vCommMsgToBeShown != null)
@@ -87,9 +102,9 @@ public class CommValidMsgMapActivity extends FragmentActivity  {
 
                 @Override
                 public void onCameraChange(CameraPosition arg0) {
-                	while(bounds == null);
+                	while(currentBounds == null);
                     // Move camera.
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 30));
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(currentBounds, 30));
                     if( mMarkers.size() == 1 )
                     	mMap.moveCamera(CameraUpdateFactory.zoomTo(17.0f));
                     // Remove listener to prevent position reset on camera move.
@@ -99,16 +114,18 @@ public class CommValidMsgMapActivity extends FragmentActivity  {
         }
     }
     
+    /** This method is responsible for displaying the community messages on the map. It expects the 
+     *  the member variables (mMarkers, m_vServer, m_vActiveMsg) to be initialized (non null). */
     private void displayMessages() {
-    	CameraUpdate center = CameraUpdateFactory.newLatLng(new LatLng(defaultLat,defaultLong));
+    	CameraUpdate center = CameraUpdateFactory.newLatLng(new LatLng(UTA_SOUTHWEST_LAT, UTA_SOUTHWEST_LONG));
     	CameraUpdate zoom = CameraUpdateFactory.zoomTo(15);
 
     	mMap.moveCamera(center);
     	mMap.animateCamera(zoom);
     	mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
     	
-    	LatLng vFirstPoint = new LatLng(defaultLat, defaultLong);
-         for(int i =0; i < m_vActiveMsg.size(); i++)
+    	LatLng vFirstPoint = new LatLng(UTA_SOUTHWEST_LAT, UTA_SOUTHWEST_LONG);
+         for(int i = 0; i < m_vActiveMsg.size(); i++)
          {
          	CommunityMsg vMsg = m_vActiveMsg.get(i);
          
@@ -145,7 +162,7 @@ public class CommValidMsgMapActivity extends FragmentActivity  {
     
     private void setMapView() {
     	if( mMarkers.size() == 0 ) {
-    		bounds = defaultBounds;
+    		currentBounds = defaultBounds;
     		mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(defaultBounds, 5));
     		dispNoMarkers();
     	} else {
@@ -154,10 +171,9 @@ public class CommValidMsgMapActivity extends FragmentActivity  {
 	    	for(Marker m : mMarkers) {
 	    	    b.include(m.getPosition());
 	    	}
-	    	bounds = b.build();
-	    	//Change the padding as per needed
-	    	//CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 30);
-	    	//mMap.animateCamera(cu);
+	    	// update the currentBounds to display all the markers.
+	    	currentBounds = b.build();
+	    	
     	}
     }
     
@@ -200,15 +216,14 @@ public class CommValidMsgMapActivity extends FragmentActivity  {
 			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 
 			// set title
-			alertDialogBuilder.setTitle("Server is Down");
+			alertDialogBuilder.setTitle("Server Down");
 
 			// set dialog message
-			alertDialogBuilder.setMessage("Oops...it appears the server is currently down!\n\nPlease try again later...")
+			alertDialogBuilder.setMessage("The server is not responding. \n\nPlease try again later.")
 							  .setCancelable(false)
 							  .setNeutralButton("OK",new DialogInterface.OnClickListener() {
 								  public void onClick(DialogInterface dialog,int id) {
-								  		dialog.cancel();	// if this button is clicked, close dialog
-								  		//startLoginActivity(false);
+								  		dialog.cancel();	// if this button is clicked, close dialog.
 								  }
 							  });
 
@@ -223,23 +238,23 @@ public class CommValidMsgMapActivity extends FragmentActivity  {
 	    private void startGetMapMsgsTask() {        
 	    	
 	        /* Set up a progress dialog for waiting while getting messages */
-	    	ProgressDialog dialog = ProgressDialog.show( CommValidMsgMapActivity.this, "Loading...", "Please wait...", true);
+	    	ProgressDialog dialog = ProgressDialog.show( ComMsgMapDetailsActivity.this, "Loading...", "Please wait...", true);
 	    	
 	    	/* Attempt to get messages in a separate thread */
-	    	GetCommuMapMsgsTask lt = new GetCommuMapMsgsTask(dialog);
+	    	ComMsgDownloaderTask lt = new ComMsgDownloaderTask(dialog);
 			lt.execute();
 	    }
 	    
 	    /**
 	     * This inner class is used to get messages with a nice looking Progress Dialog
 	     * */
-	    private class GetCommuMapMsgsTask extends AsyncTask<Void, Void, Void> {
-	    	private ProgressDialog progressDialog = null;
-	    	private boolean serverDown = false;
+	    private class ComMsgDownloaderTask extends AsyncTask<Void, Void, Void> {
+	    	private ProgressDialog m_vProgressDialog = null;
+	    	private boolean m_bServerDown = false;
 	    	 
-	    	public GetCommuMapMsgsTask(ProgressDialog progressDialog)
+	    	public ComMsgDownloaderTask(ProgressDialog progressDialog)
 	    	{
-	    		this.progressDialog = progressDialog;
+	    		this.m_vProgressDialog = progressDialog;
 	    	}
 	    	
 	    	@Override
@@ -247,22 +262,22 @@ public class CommValidMsgMapActivity extends FragmentActivity  {
 				try {
 					getCommunityMapMessages();
 				} catch (ConnectTimeoutException e) {
-					serverDown = true;
+					m_bServerDown = true;
 				}
 				return null;
 	    	}
 
 	    	@Override
 	    	protected void onPreExecute() {
-	    		progressDialog.show();	// Show Progress Dialog before executing authentication
+	    		m_vProgressDialog.show();	// Show Progress Dialog before running doInBackground()
 	    	}
 
 	    	@Override
 	    	protected void onPostExecute(Void v) {
-	    		 progressDialog.dismiss();	// Hide Progress Dialog after executing authentication
-	    		 if( serverDown ) {
+	    		 m_vProgressDialog.dismiss();	// Hide Progress Dialog after executing doInBackground()
+	    		 if( m_bServerDown ) {
 	    			 dispServerDown();
-	    			 serverDown = false;
+	    			 //m_bServerDown = false;
 	    		 } else {
 	    			 displayMessages();
 	    		 }

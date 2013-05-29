@@ -36,7 +36,7 @@ public class StartScreen extends Activity {
         showMapBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Perform action on click
-            	Intent mapActivity = new Intent(StartScreen.this, CommValidMsgMapActivity.class);
+            	Intent mapActivity = new Intent(StartScreen.this, ComMsgMapDetailsActivity.class);
         		startActivity(mapActivity);
             }
         });
@@ -212,7 +212,7 @@ public class StartScreen extends Activity {
 			    		String loc = m_vPushedComMsg.getLatLong();//intent.getStringExtra("location");
 			    		if( loc != null )//loc != null && !loc.equals("") )
 			    		{
-			    			vMsgDetailIntent = new Intent(ctx,CommValidMsgMapActivity.class);
+			    			vMsgDetailIntent = new Intent(ctx,ComMsgMapDetailsActivity.class);
 			    			//vMsgDetailIntent.setClass(this, CommValidMsgMapActivity.class);
 			    			vMsgDetailIntent.putExtra("CommMsgObject", m_vPushedComMsg);
 			    		}
