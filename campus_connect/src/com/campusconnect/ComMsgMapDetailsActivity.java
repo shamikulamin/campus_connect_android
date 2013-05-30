@@ -10,15 +10,15 @@ import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.view.Display;
 import android.view.Window;
+import android.view.WindowManager;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.GoogleMap.OnCameraChangeListener;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
@@ -98,19 +98,6 @@ public class ComMsgMapDetailsActivity extends FragmentActivity  {
         if (mMap == null) {
             // Try to obtain the map from the SupportMapFragment.
             mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
-            mMap.setOnCameraChangeListener(new OnCameraChangeListener() {
-
-                @Override
-                public void onCameraChange(CameraPosition arg0) {
-                	while(currentBounds == null);
-                    // Move camera.
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(currentBounds, 30));
-                    if( mMarkers.size() == 1 )
-                    	mMap.moveCamera(CameraUpdateFactory.zoomTo(17.0f));
-                    // Remove listener to prevent position reset on camera move.
-                    mMap.setOnCameraChangeListener(null);
-                }
-            });
         }
     }
     
@@ -155,15 +142,17 @@ public class ComMsgMapDetailsActivity extends FragmentActivity  {
  	        	}
  	        }       
          }
-         LatLng l = new LatLng(vFirstPoint.latitude,vFirstPoint.longitude);
-         mMap.animateCamera(CameraUpdateFactory.newLatLng(l));
          setMapView();
     }
     
     private void setMapView() {
+    	WindowManager wm = getWindowManager();
+    	Display d = wm.getDefaultDisplay();
+    	
+    	// Google recommends to use Display.getSize() instead of Display.getWidth() and Display.getHeight()     	
     	if( mMarkers.size() == 0 ) {
     		currentBounds = defaultBounds;
-    		mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(defaultBounds, 5));
+    		mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(defaultBounds,d.getWidth(),d.getHeight(),30));
     		dispNoMarkers();
     	} else {
 	    	//Calculate the markers to get their position
@@ -173,7 +162,7 @@ public class ComMsgMapDetailsActivity extends FragmentActivity  {
 	    	}
 	    	// update the currentBounds to display all the markers.
 	    	currentBounds = b.build();
-	    	
+	    	mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(currentBounds,d.getWidth(),d.getHeight(),30));
     	}
     }
     
