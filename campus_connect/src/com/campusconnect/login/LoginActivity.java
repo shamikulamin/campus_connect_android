@@ -33,10 +33,16 @@ public class LoginActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         setPasswordText();
-        boolean dispDialog = getIntent().getBooleanExtra("displayDialog", false);//getStringExtra("displayDialog");
+        boolean dispDialog = getIntent().getBooleanExtra("displayDialog", false);
         if( dispDialog )
         	displayInvalidCredentialsAlert();
     }
+	
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		GCMRegistrar.onDestroy(this);
+	}
 	
 	 @Override
     public void onBackPressed() {
