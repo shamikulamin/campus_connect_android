@@ -17,7 +17,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-public class main extends Activity {
+public class ComMsgListActivity extends Activity {
 
 	// GCM variables.
 	//private final String SENDER_ID = "610775927206";
@@ -35,16 +35,10 @@ public class main extends Activity {
 	/* NOTE: Creating your own constructor for a class that extends activity is a
 	 * bad idea. Some variables such as context aren't initialized correctly. Instead,
 	 * use the on create method to initialize your variables */
-	//public main()
-	//{
-		//vConnector = new ServerConnector();
-		//loadComMsg();
-		//startLoadComMsgTask();
-	//}
 	
 	/** Called to load the messages in the background */
     private void startLoadComMsgTask() {        
-    	ProgressDialog dialog = ProgressDialog.show( main.this, "Loading...", "Please wait...", true);
+    	ProgressDialog dialog = ProgressDialog.show( ComMsgListActivity.this, "Loading...", "Please wait...", true);
     	
     	/* Attempt to load community messages */
     	LoadComMsgTask lcmt = new LoadComMsgTask(dialog);
@@ -85,7 +79,7 @@ public class main extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        vConnector = new ServerConnector(main.this);
+        vConnector = new ServerConnector(ComMsgListActivity.this);
 		startLoadComMsgTask();
     }
     
@@ -163,7 +157,7 @@ public class main extends Activity {
 	}
     
     /**
-     * This inner class is used to Authenticate a user with a nice looking Progress Dialog
+     * This inner class is used to load the community messages with a nice looking Progress Dialog
      * */
     private class LoadComMsgTask extends AsyncTask<Void, Void, Void> {
     	private ProgressDialog progressDialog = null;
@@ -197,7 +191,7 @@ public class main extends Activity {
     		 }
     		 
     		 vCommMsgList = (ListView) findViewById(R.id.list);
-    	     vCommMsgList.setAdapter(new CommunityMsgAdapter(main.this, R.layout.row, m_asCommAlerts));
+    	     vCommMsgList.setAdapter(new CommunityMsgAdapter(ComMsgListActivity.this, R.layout.row, m_asCommAlerts));
     	     vCommMsgList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
     	     vCommMsgList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -207,13 +201,13 @@ public class main extends Activity {
     						
     						if(hasCommMsgLocation(m_ComMsgID.get(iPos)))
     						{
-    							Intent vMsgDetailIntent = new Intent(main.this, ComMsgMapDetailsActivity.class);
+    							Intent vMsgDetailIntent = new Intent(ComMsgListActivity.this, ComMsgMapDetailsActivity.class);
     							vMsgDetailIntent.putExtra("CommMsgObject", m_asCommAlerts.get(iPos));						
     							startActivity(vMsgDetailIntent);
     						}
     						else
     						{
-    							Intent vMsgDetailIntent = new Intent(main.this, ComMsgDetailsActivity.class);
+    							Intent vMsgDetailIntent = new Intent(ComMsgListActivity.this, ComMsgDetailsActivity.class);
     							vMsgDetailIntent.putExtra("msg_id", m_ComMsgID.get(iPos));
     							startActivity(vMsgDetailIntent);
     						}					

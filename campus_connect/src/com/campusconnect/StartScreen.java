@@ -45,7 +45,7 @@ public class StartScreen extends Activity {
         showListBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Perform action on click
-            	Intent mainScreen = new Intent(StartScreen.this, main.class);
+            	Intent mainScreen = new Intent(StartScreen.this, ComMsgListActivity.class);
         		startActivity(mainScreen);
             }
         });

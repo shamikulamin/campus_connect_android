@@ -41,7 +41,7 @@ public class ReportIncidentActivity extends Activity implements MediaScannerConn
 
 	
 	final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 111;
-	int NUM_OF_IMAGE = 4;
+	int NUM_OF_IMAGE = 10;
 	String[] asImagepath = new String[NUM_OF_IMAGE];
 	
 	int THUMBNAIL_HEIGHT = 0;
@@ -54,7 +54,7 @@ public class ReportIncidentActivity extends Activity implements MediaScannerConn
     static final int CAMERA_ACTIVITY_RESULT = 121;
     
     final String m_sProvider = LocationManager.GPS_PROVIDER;
-    private static final int DIALOG_SENDING_REPORT = 0;
+   
     
     void setHideKeyboard() {
     	final EditText details = (EditText) findViewById(R.id.msgdetails);
@@ -90,19 +90,9 @@ public class ReportIncidentActivity extends Activity implements MediaScannerConn
         
         InitializeLocationManager();
                
-        Display display = getWindowManager().getDefaultDisplay();
-        
-        //THUMBNAIL_WIDTH  = (int)(display.getWidth()/NUM_OF_IMAGE);
-        //THUMBNAIL_HEIGHT = (int)(display.getHeight()*.2);
-        
-        
+                   
         Button addPhoto = (Button)findViewById(R.id.add_image);
-        /*if(validImageIndex(m_iCurrentImageNum + 1))
-        	addPhoto.setClickable(false);
-        else
-        	addPhoto.setClickable(true);
-        */
-        
+            
         addPhoto.setOnClickListener(new View.OnClickListener() {
 	         public void onClick(View arg0) {
 	        	 startCameraActivity();	        	 
@@ -113,7 +103,7 @@ public class ReportIncidentActivity extends Activity implements MediaScannerConn
         vReport.setOnClickListener(new View.OnClickListener() {			
 			public void onClick(View v) 
 			{
-				startSendIncReportTask();//sendReport();
+				startSendIncReportTask(); 
 			}
 		});
         
@@ -127,7 +117,7 @@ public class ReportIncidentActivity extends Activity implements MediaScannerConn
 		});
         
 	}
-    
+ 
     private boolean sendReport() throws ConnectTimeoutException {
     	try {
     		/* Get SharedPreferences to see if we already have set a user/pass combo */
@@ -140,11 +130,6 @@ public class ReportIncidentActivity extends Activity implements MediaScannerConn
 			ServerConnector vConnector = new ServerConnector(ReportIncidentActivity.this);
 			Location location = m_vLocationManager.getLastKnownLocation(m_sProvider);
 			return vConnector.sendIncidentMsg(vEdit.getText().toString(), enc_user, enc_pass, System.currentTimeMillis(), location, getImageDir());
-			/*if(vConnector.sendIncidentMsg(vEdit.getText().toString(), System.currentTimeMillis(), location, getImageDir())) {
-				displaySuccessMsg();						
-			} else {
-				displayErrorMsg();								
-			}*/
     	} catch( ConnectTimeoutException e ) {
     		throw e;
     	}
@@ -176,13 +161,7 @@ public class ReportIncidentActivity extends Activity implements MediaScannerConn
            }  
            })  
         .show();
-    }
-
-	Context GetContext()
-	{
-		return getBaseContext();
-	}
-	
+    }	
 	
 	protected void startCameraActivity() 
 	{
@@ -202,57 +181,16 @@ public class ReportIncidentActivity extends Activity implements MediaScannerConn
 	    { 
 	    	if (resultCode == Activity.RESULT_OK) 
 	    	{        
-	    		/*Bundle extras = intent.getExtras();
-	    		Bitmap bm = (Bitmap)extras.get("data");
-		      
-		      
-		      try{
-		    	  
-		    	  FileOutputStream out = new FileOutputStream(new File(getNextImageName()));
-		    	  
-		          bm.compress(Bitmap.CompressFormat.PNG, 100, out);
-		      }catch(Exception e){
-		    	  Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG);
-		      }
-		      
-		      loadImage(bm);
-		      bm.recycle();*/
-		      m_iCurrentImageNum++;		      
+	    	   m_iCurrentImageNum = (m_iCurrentImageNum + 1) % NUM_OF_IMAGE;		      
 	    	} 	    
 	      
 	    } 
 	  } 
 	}
 
-	/*void loadImage(Bitmap imageBitmap)
-	{
-		int iResourceID = -1;
-		if(m_iCurrentImageNum == 0)
-			iResourceID = R.id.img1;
-		else if(m_iCurrentImageNum == 1)
-			iResourceID = R.id.img2;
-		else if(m_iCurrentImageNum == 2)
-			iResourceID = R.id.img3;
-		else if(m_iCurrentImageNum == 3)
-			iResourceID = R.id.img4;
-		else 
-			return;
-		
-		ImageView vImg = (ImageView) findViewById(iResourceID);
-        
-        Float width  = new Float(imageBitmap.getWidth());
-        Float height = new Float(imageBitmap.getHeight());
-        Float ratio = width/height;
-        imageBitmap = Bitmap.createScaledBitmap(imageBitmap, (int)(THUMBNAIL_HEIGHT*ratio), THUMBNAIL_HEIGHT, false);
-        
-        vImg.setPadding(5, 5, 5, 5);
-        vImg.setImageBitmap(imageBitmap);
-  	}
-	*/
-		
 	private String getImageDir()
 	{
-		return Environment.getExternalStorageDirectory()+ File.separator + "campus_connect" + File.separator;
+		return Environment.getExternalStorageDirectory() + File.separator + "campus_connect" + File.separator;
 	}
 	
 	private String getNextImageName()
@@ -280,18 +218,10 @@ public class ReportIncidentActivity extends Activity implements MediaScannerConn
 	protected void onStart()
 	{
 		super.onStart();
-		/*if(m_iCurrentImageNum >= 3)
-		{
-			Button bAddImage = (Button)findViewById(R.id.add_image);
-			if(bAddImage != null)
-				bAddImage.setEnabled(false);
-		}*/
 		
 		Button b = (Button)findViewById(R.id.btnSendReport);
 		if(b != null)
-			b.requestFocus();
-		
-		
+			b.requestFocus();		
 	}
 	
 	private void InitializeLocationManager()
@@ -338,10 +268,6 @@ public class ReportIncidentActivity extends Activity implements MediaScannerConn
 
 	}
 	
-	/*protected void onStop() {
-	    super.onStop();
-	    m_vLocationManager.removeUpdates(m_vListener);
-	}*/
 	
 	protected void onDestroy()
 	{

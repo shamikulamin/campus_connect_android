@@ -33,8 +33,8 @@ public class LoginActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         setPasswordText();
-        String dispDialog = getIntent().getStringExtra("displayDialog");
-        if( Boolean.parseBoolean(dispDialog) )
+        boolean dispDialog = getIntent().getBooleanExtra("displayDialog", false);//getStringExtra("displayDialog");
+        if( dispDialog )
         	displayInvalidCredentialsAlert();
     }
 	

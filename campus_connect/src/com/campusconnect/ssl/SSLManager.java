@@ -366,9 +366,7 @@ public class SSLManager {
 			String line = null;
 			while((line = in.readLine()) != null) {
 			    System.out.println(line);
-			}
-
-			
+			}			
 		
 		} catch (ConnectTimeoutException e) {
 			throw e;
