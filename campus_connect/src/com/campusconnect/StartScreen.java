@@ -87,9 +87,6 @@ public class StartScreen extends Activity {
     private void startLoginActivity(boolean displayDialog) {
     	Intent intent = new Intent(this, LoginActivity.class);
     	intent.putExtra("displayDialog", displayDialog);
-    	
-        /* Adds the FLAG_ACTIVITY_NO_HISTORY which will not allow users to go back to login screen once successfully logged in */
-        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         startActivity(intent);
     }
     
