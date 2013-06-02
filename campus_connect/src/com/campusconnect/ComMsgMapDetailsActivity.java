@@ -98,6 +98,8 @@ public class ComMsgMapDetailsActivity extends FragmentActivity  {
         if (mMap == null) {
             // Try to obtain the map from the SupportMapFragment.
             mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
+            mMap.setInfoWindowAdapter(new CCInfoWindowAdapter(getLayoutInflater()));
+           // mMap.setOnInfoWindowClickListener(this);
         }
     }
     
