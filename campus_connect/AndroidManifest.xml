@@ -41,9 +41,12 @@
         
         <activity android:name=".ComMsgListActivity"        		 
                   android:screenOrientation="portrait"
-            	  android:theme="@android:style/Theme.Black.NoTitleBar"
-                  >
-            
+            	  android:theme="@android:style/Theme.Black.NoTitleBar" >
+        </activity>
+        <activity android:name="MapPopupActivity"
+               	  android:theme="@android:style/Theme.Dialog"
+                  android:screenOrientation="portrait"
+            	  android:excludeFromRecents="true">
         </activity>
         <activity android:name="StartScreen"
             	  android:screenOrientation="portrait"
