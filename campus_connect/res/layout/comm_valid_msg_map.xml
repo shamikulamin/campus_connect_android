@@ -17,6 +17,6 @@
             android:layout_height="fill_parent"             
             android:clickable="true"
             android:apiKey="0uZz715RS6NSfKFjxWJlnQGZq8p4wTj3nrP5BZg"
-            /> -->          
+            />-->
     </FrameLayout>
     

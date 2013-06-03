@@ -20,12 +20,12 @@
             android:padding="0px"           
             >                                                    
             
-        <Button android:id="@+id/btnGoBack"
+        <!--<Button android:id="@+id/btnGoBack"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1.0"
             android:textSize="12sp" 
-            android:text="@string/returnMain" />
+            android:text="@string/returnMain" />-->
                             
         </LinearLayout>
                     
