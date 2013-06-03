@@ -252,7 +252,11 @@ public class SSLManager {
 	
 	public String getHostName()
 	{
-		return "https://" + m_sServerIP + "/Test1/";
+		return "https://" + m_sServerIP + "/HibernateProject-1.0-SNAPSHOT/";
+	}
+	
+	public String getLDAPName() {
+		return getHostName() + "LDAPServlet";
 	}
 	
 	private String getResponse(String sParamName, String sParamVal) throws ConnectTimeoutException
@@ -393,7 +397,7 @@ public class SSLManager {
 			
 			ByteArrayOutputStream outstream = new ByteArrayOutputStream();
 			HttpClient httpClient = new CCHttpClient(ctx, httpParameters);
-			HttpPost httpPost = new HttpPost("https://"+m_sServerIP+"/LDAP");
+			HttpPost httpPost = new HttpPost(getLDAPName());
 			httpPost.setParams(httpParameters);
 			ArrayList<NameValuePair> postParameters = new ArrayList<NameValuePair>();
 			postParameters.add(new BasicNameValuePair("netid", enc_uid));

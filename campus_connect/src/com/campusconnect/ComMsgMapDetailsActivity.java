@@ -7,6 +7,7 @@ import org.apache.http.conn.ConnectTimeoutException;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -17,6 +18,7 @@ import android.view.WindowManager;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
@@ -24,7 +26,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class ComMsgMapDetailsActivity extends FragmentActivity  {
+public class ComMsgMapDetailsActivity extends FragmentActivity implements OnInfoWindowClickListener {
 	private GoogleMap mMap;
     private ServerConnector m_vServer;
     private ArrayList<CommunityMsg> m_vActiveMsg;
@@ -98,8 +100,8 @@ public class ComMsgMapDetailsActivity extends FragmentActivity  {
         if (mMap == null) {
             // Try to obtain the map from the SupportMapFragment.
             mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
-            mMap.setInfoWindowAdapter(new CCInfoWindowAdapter(getLayoutInflater()));
-           // mMap.setOnInfoWindowClickListener(this);
+            //mMap.setInfoWindowAdapter(new CCInfoWindowAdapter(getLayoutInflater()));
+            mMap.setOnInfoWindowClickListener(this);
         }
     }
     
@@ -274,5 +276,15 @@ public class ComMsgMapDetailsActivity extends FragmentActivity  {
 	    		 }
 	    	}
 	     }
+
+		@Override
+		public void onInfoWindowClick(Marker marker) {
+			// TODO Auto-generated method stub
+			// Toast.makeText(this, marker.getTitle(), Toast.LENGTH_LONG).show();
+			Intent intent = new Intent(this, MapPopupActivity.class);
+			intent.putExtra("title",marker.getTitle());
+			intent.putExtra("snippet", marker.getSnippet());
+			startActivity(intent);
+		}
     
 }

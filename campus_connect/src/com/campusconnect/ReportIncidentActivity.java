@@ -29,11 +29,11 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class ReportIncidentActivity extends Activity implements MediaScannerConnectionClient
 {
 	
-	public String[] allFiles;
 	private String SCAN_PATH ;
 	private static final String FILE_TYPE = "image/*";
 
@@ -174,8 +174,8 @@ public class ReportIncidentActivity extends Activity implements MediaScannerConn
     }
 	
 	@Override 
-	public void onActivityResult(int requestCode, int resultCode, Intent intent) {     
-	  super.onActivityResult(requestCode, resultCode, intent); 
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {     
+	  super.onActivityResult(requestCode, resultCode, data); 
 	  switch(requestCode) { 
 	    case (CAMERA_ACTIVITY_RESULT) : 
 	    { 
@@ -320,6 +320,7 @@ public class ReportIncidentActivity extends Activity implements MediaScannerConn
 
 	@Override
 	public void onMediaScannerConnected() {
+		//MediaScannerConnection.
 		Log.d("onMediaScannerConnected","success"+conn);
 	    conn.scanFile(SCAN_PATH, FILE_TYPE); 
 		
@@ -333,9 +334,14 @@ public class ReportIncidentActivity extends Activity implements MediaScannerConn
 	        Log.d("onScanCompleted",uri + "success"+conn);
 	        if (uri != null) 
 	        {
-		        Intent intent = new Intent(Intent.ACTION_VIEW);
-		        intent.setData(uri);
-		        startActivity(intent);
+	        	Intent intent = new Intent();
+	        	intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+	        	intent.setAction(Intent.ACTION_VIEW);
+	        	intent.setDataAndType(uri, FILE_TYPE);
+	        	startActivity(intent);
+		        //Intent intent = new Intent(Intent.ACTION_VIEW);
+		        //intent.setData(uri);
+		        //startActivity(intent);
 	        }
 		}
 		finally 
