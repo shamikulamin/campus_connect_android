@@ -18,9 +18,13 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.View.OnKeyListener;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class LoginActivity extends Activity {
@@ -81,6 +85,18 @@ public class LoginActivity extends Activity {
     private void setPasswordText() {
     	EditText password = (EditText) findViewById(R.id.password);
         password.setTypeface(Typeface.DEFAULT);
+        password.setOnKeyListener(new OnKeyListener() {
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                // If the event is a key-down event on the "enter" button
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                	startLoginTask(v);
+                  // Perform action on key press
+                //  Toast.makeText(HelloFormStuff.this, edittext.getText(), Toast.LENGTH_SHORT).show();
+                  return true;
+                }
+                return false;
+            }
+        });
     }
     
     /** Called when the user clicks the Login button */
