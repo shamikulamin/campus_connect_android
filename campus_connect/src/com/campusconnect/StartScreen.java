@@ -59,6 +59,15 @@ public class StartScreen extends Activity {
             }
         });
         
+        Button emergencyAssitanceBtn = (Button) findViewById(R.id.emergency_assitance);
+        emergencyAssitanceBtn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // Perform action on click
+            	Intent emAssist = new Intent(StartScreen.this, EmergencyAssistanceActivity.class);
+        		startActivity(emAssist);
+            }
+        });
+        
 	}
 	
 	/**
