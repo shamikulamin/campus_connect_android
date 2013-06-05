@@ -18,6 +18,9 @@ import android.widget.Button;
 
 import com.campusconnect.login.*;
 import com.google.android.gcm.GCMRegistrar;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.maps.model.Marker;
 
 public class StartScreen extends Activity {
 	private static final String SENDER_ID = "507557004717";	// This is a constant provided by Google which uniquely identifies the application
@@ -35,9 +38,14 @@ public class StartScreen extends Activity {
         Button showMapBtn = (Button) findViewById(R.id.show_in_map);
         showMapBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                // Perform action on click
-            	Intent mapActivity = new Intent(StartScreen.this, ComMsgMapDetailsActivity.class);
-        		startActivity(mapActivity);
+            	int status = GooglePlayServicesUtil.isGooglePlayServicesAvailable(getApplicationContext());
+            	if(status == ConnectionResult.SUCCESS) {
+	                // Perform action on click
+	            	Intent mapActivity = new Intent(StartScreen.this, ComMsgMapDetailsActivity.class);
+	        		startActivity(mapActivity);
+            	} else {
+            		alertNoPlayServices();
+            	}
             }
         });
         
@@ -59,6 +67,7 @@ public class StartScreen extends Activity {
             }
         });
         
+        /*
         Button emergencyAssitanceBtn = (Button) findViewById(R.id.emergency_assitance);
         emergencyAssitanceBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -66,9 +75,33 @@ public class StartScreen extends Activity {
             	Intent emAssist = new Intent(StartScreen.this, EmergencyAssistanceActivity.class);
         		startActivity(emAssist);
             }
-        });
+        });*/
         
 	}
+	
+	private void alertNoPlayServices() {
+		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+ 
+			// set title
+			alertDialogBuilder.setTitle("No Google Play Services!");
+ 
+			// set dialog message
+			alertDialogBuilder
+				.setMessage("Your device doesn't have Google Play Services installed if you would like to download it please click OK.")
+				.setCancelable(false)
+				.setNeutralButton("OK",new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog,int id) {
+			  		    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id="+appName)));
+						dialog.cancel();
+					}
+				  });
+ 
+				// create alert dialog
+				AlertDialog alertDialog = alertDialogBuilder.create();
+ 
+				// show it
+				alertDialog.show();
+		}
 	
 	/**
      * See if user has valid login credentials saved. If so then log them in, otherwise launch login activity

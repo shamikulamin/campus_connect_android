@@ -167,6 +167,8 @@ public class ComMsgMapDetailsActivity extends FragmentActivity implements OnInfo
 	    	// update the currentBounds to display all the markers.
 	    	currentBounds = b.build();
 	    	mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(currentBounds,d.getWidth(),d.getHeight(),30));
+	    	if( mMarkers.size() == 1 )
+	    		mMap.moveCamera(CameraUpdateFactory.zoomTo(17.0f));
     	}
     }
     
@@ -281,10 +283,32 @@ public class ComMsgMapDetailsActivity extends FragmentActivity implements OnInfo
 		public void onInfoWindowClick(Marker marker) {
 			// TODO Auto-generated method stub
 			// Toast.makeText(this, marker.getTitle(), Toast.LENGTH_LONG).show();
-			Intent intent = new Intent(this, MapPopupActivity.class);
+			/*Intent intent = new Intent(this, MapPopupActivity.class);
 			intent.putExtra("title",marker.getTitle());
 			intent.putExtra("snippet", marker.getSnippet());
-			startActivity(intent);
-		}
+			startActivity(intent);*/
+			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+	 
+				// set title
+				alertDialogBuilder.setTitle(marker.getTitle());
+	 
+				// set dialog message
+				alertDialogBuilder
+					.setMessage(marker.getSnippet())
+					.setCancelable(false)
+					.setNeutralButton("OK",new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog,int id) {
+							// if this button is clicked, close
+							// current activity
+							dialog.cancel();
+						}
+					  });
+	 
+					// create alert dialog
+					AlertDialog alertDialog = alertDialogBuilder.create();
+	 
+					// show it
+					alertDialog.show();
+			}
     
 }
