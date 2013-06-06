@@ -167,8 +167,8 @@ public class ComMsgMapDetailsActivity extends FragmentActivity implements OnInfo
 	    	// update the currentBounds to display all the markers.
 	    	currentBounds = b.build();
 	    	mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(currentBounds,d.getWidth(),d.getHeight(),30));
-	    	if( mMarkers.size() == 1 )
-	    		mMap.moveCamera(CameraUpdateFactory.zoomTo(17.0f));
+	    	/*if( mMarkers.size() == 1 )
+	    		mMap.moveCamera(CameraUpdateFactory.zoomTo(17.0f));*/
     	}
     }
     
