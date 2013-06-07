@@ -8,6 +8,7 @@ import com.google.android.gcm.GCMRegistrar;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -38,6 +39,8 @@ public class LoginActivity extends Activity {
         setContentView(R.layout.activity_login);
         setPasswordText();
         boolean dispDialog = getIntent().getBooleanExtra("displayDialog", false);
+        new TosEula(this).show();
+        //showDialog(0);
         if( dispDialog )
         	displayInvalidCredentialsAlert();
     }
@@ -56,6 +59,28 @@ public class LoginActivity extends Activity {
 	/**
 	 * Displays an AlertDialog to the user to notify of changed credentials
 	 * */
+	 
+	/*protected Dialog onCreateDialog(int id){
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("LEGAL DISCLAIMER: ... ")
+               .setCancelable(false)
+               .setPositiveButton("Agree", new DialogInterface.OnClickListener() {
+                   public void onClick(DialogInterface dialog, int id) {
+                       // and, if the user accept, you can execute something like this:
+                       // We need an Editor object to make preference changes.
+                       // All objects are from android.context.Context
+   
+                   }
+               })
+               .setNegativeButton("Disagree", new DialogInterface.OnClickListener() {
+                   public void onClick(DialogInterface dialog, int id) {
+                       //nm.cancel(R.notification.running); // cancel the NotificationManager (icon)
+                        System.exit(0);
+                   }
+               });
+        AlertDialog alert = builder.create();
+        return alert;
+	}*/
  	private void  displayInvalidCredentialsAlert() {
 		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 

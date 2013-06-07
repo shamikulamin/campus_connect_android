@@ -6,4 +6,62 @@
     <string name="username">Enter a Username</string>
     <string name="password">Enter a Password</string>
     <string name="button_login">Login</string>
+    <string name="title">Terms of Services Agreement\n\n\n</string>
+    <string name="eula">                                                                     
+                                                                     
+                                                                     
+                                             
+What information do we collect? \n\n
+
+We collect information from you when you send a report, as appropriate, we will make use of your: name, current location, e-mail address, phone number, or emergency contact information.\n\n
+
+What do we use your information for? \n\n
+
+Any of the information we collect from you may be used in one of the following ways: \n\n
+
+; To personalize your experience\n
+(your information helps us to better respond to your individual needs)\n\n
+
+; To improve service\n
+(your information helps us to more effectively respond to your service requests and support needs)\n\n
+
+How do we protect your information? \n\n
+
+We implement a variety of security measures to maintain the safety of your personal information when you enter, or submit your personal information. \n\n
+
+We offer the use of a secure server. All supplied sensitive information is first encrypted and stored locally. In addition, all communications to the server are done via Secure Socket Layer (SSL) technology. Further, this server can only be accessed by those authorized with special access rights to our systems.\n\n
+
+Do we disclose any information to outside parties? \n\n
+
+We do not sell, trade, or otherwise transfer to outside parties your personally identifiable information.\n\n
+
+Report Liability\n\n
+
+Any misuse of the application is considered a violation of a Texas state law. Therefore, Submitting fake or untruthful reports to the police department may result in penalties including: \n\t\t
+		-1 (Fill penalty 1 here)\n\t\t
+		-2 (Fill penalty 2 here)\n\t\t
+		-3 (Fill penalty 3 here)\n\t\t
+		...\n\t\t
+		-\n\n
+
+Your Consent \n\n
+
+By using our application, you consent to these Terms of Service (TOS).\n\n
+
+Changes to our Terms of Service\n\n
+
+If we decide to change our TOS, we will update the TOS modification date below. \n\n
+
+This TOS was last modified on 05/31/13\n\n
+
+Contacting Us \n\n
+
+If there are any questions regarding these TOS you may contact us using the information below. \n\n
+
+http://www.uta.edu/campus-ops/police/\n
+700 S. Davis St.\n
+Arlington, Texas 76013\n
+United States\n
+policedepartment@uta.edu\n
+(817) 272-3381\n</string>
 </resources>

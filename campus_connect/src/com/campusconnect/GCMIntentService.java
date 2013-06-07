@@ -77,7 +77,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 		
 		HttpClient httpClient = new DefaultHttpClient();
 		Log.v("In onRegistered","regId: "+regId);
-		HttpPost httpPost = new HttpPost("http://"+IP_Address+":8084/Test1/Register");
+		HttpPost httpPost = new HttpPost("http://"+IP_Address+":8084/HibernateProject/Register");
 		ArrayList<NameValuePair> postParameters = new ArrayList<NameValuePair>();
 		postParameters.add(new BasicNameValuePair("regID", regId));
 		UrlEncodedFormEntity formEntity = null;
