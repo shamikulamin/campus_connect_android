@@ -128,6 +128,7 @@ public class StartScreen extends Activity {
      * */
     private void startLoginActivity(boolean displayDialog) {
     	Intent intent = new Intent(this, LoginActivity.class);
+    	intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
     	intent.putExtra("displayDialog", displayDialog);
         startActivity(intent);
     }
