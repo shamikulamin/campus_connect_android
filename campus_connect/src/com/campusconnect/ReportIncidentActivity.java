@@ -1,8 +1,11 @@
 package com.campusconnect;
 
 import java.io.File;
-
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import org.apache.http.conn.ConnectTimeoutException;
+
+import com.campusconnect.login.TosEula;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -111,7 +114,7 @@ public class ReportIncidentActivity extends Activity implements MediaScannerConn
         vViewImages.setOnClickListener(new View.OnClickListener() {			
 			public void onClick(View v) 
 			{
-				SCAN_PATH = getFirstImageName();
+				//SCAN_PATH = getFirstImageName();
 				startScan();				
 			}
 		});
@@ -165,12 +168,30 @@ public class ReportIncidentActivity extends Activity implements MediaScannerConn
 	
 	protected void startCameraActivity() 
 	{
-		Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+		//Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
 		
-		File vOutput = new File(getNextImageName());
+		/*File vOutput = new File(getNextImageName());
 		
-		intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(vOutput));
-		startActivityForResult(intent,CAMERA_ACTIVITY_RESULT);
+		intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(vOutput));*/
+		//startActivityForResult(intent,CAMERA_ACTIVITY_RESULT);
+		//camera stuff
+		Intent imageIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+		String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+
+		//folder stuff
+		File imagesFolder = new File(Environment.getExternalStorageDirectory(), "MyImages");
+		if(!imagesFolder.exists())
+			imagesFolder.mkdirs();
+
+		//String filePath = "/MyImages/QR_" + timeStamp + ".png" ;
+		File image = new File(imagesFolder, "QR_" + timeStamp + ".png");
+		Uri uriSavedImage = Uri.fromFile(image);
+
+		imageIntent.putExtra(MediaStore.EXTRA_OUTPUT, uriSavedImage);
+		startActivityForResult(imageIntent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+		
+		
+		 
     }
 	
 	@Override 
@@ -190,7 +211,9 @@ public class ReportIncidentActivity extends Activity implements MediaScannerConn
 
 	private String getImageDir()
 	{
-		return Environment.getExternalStorageDirectory() + File.separator + "campus_connect" + File.separator;
+		return Environment.getExternalStorageDirectory()+ "/MyImages";
+				
+				//Environment.getExternalStorageDirectory() + File.separator + "campus_connect" + File.separator;
 	}
 	
 	private String getNextImageName()
@@ -198,7 +221,8 @@ public class ReportIncidentActivity extends Activity implements MediaScannerConn
 		String sDir = getImageDir();
 		if(validImageIndex(m_iCurrentImageNum))
 		{
-			sDir = sDir + m_iCurrentImageNum + ".jpg";
+		    // we need to mention the file types of the image. Alternately we could pass in null.
+			sDir = sDir + m_iCurrentImageNum + ".png";
 			return sDir;
 		}
 		return "";
@@ -209,7 +233,7 @@ public class ReportIncidentActivity extends Activity implements MediaScannerConn
 		String sDir = getImageDir();
 		if(m_iCurrentImageNum > 0)
 		{
-			sDir = sDir + (m_iCurrentImageNum-1) + ".jpg";
+			sDir = sDir + (m_iCurrentImageNum-1) + ".png";
 			return sDir;
 		}
 		return "";
@@ -305,7 +329,12 @@ public class ReportIncidentActivity extends Activity implements MediaScannerConn
 	
 	private void startScan()
     {
-		Log.d("Connected","success"+conn);
+		//Intent ViewImage = new Intent(ReportIncidentActivity.this, ViewImage.class);
+		//startActivity(ViewImage);
+		
+		ViewImage vImage=new ViewImage(this);
+		
+		/*Log.d("Connected","success"+conn);
 		if(conn!=null)
 	    {
 			conn.disconnect();
@@ -314,7 +343,7 @@ public class ReportIncidentActivity extends Activity implements MediaScannerConn
 		{
 			conn = new MediaScannerConnection(this,this);
 			conn.connect();
-		}
+		}*/
     }
 
 
