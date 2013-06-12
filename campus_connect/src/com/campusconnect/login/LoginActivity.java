@@ -45,6 +45,8 @@ public class LoginActivity extends Activity {
         	displayInvalidCredentialsAlert();
     }
 	
+	
+	
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
