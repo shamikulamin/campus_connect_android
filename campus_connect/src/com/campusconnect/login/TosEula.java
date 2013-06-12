@@ -1,7 +1,5 @@
 package com.campusconnect.login;
 
-import com.campusconnect.R;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -11,15 +9,21 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.preference.PreferenceManager;
 
+import com.campusconnect.R;
+
 
 public class TosEula {
 	 
     private String EULA_PREFIX = "eula_";
     private Activity mActivity;
+    
+    
  
     public TosEula(Activity context) {
         mActivity = context;
     }
+    
+    
  
     private PackageInfo getPackageInfo() {
         PackageInfo pi = null;
@@ -48,6 +52,7 @@ public class TosEula {
             AlertDialog.Builder builder = new AlertDialog.Builder(mActivity)
                     .setTitle(title)
                     .setMessage(message)
+                    .setCancelable(false) 
                     .setPositiveButton("Agree", new Dialog.OnClickListener() {
  
                         @Override
