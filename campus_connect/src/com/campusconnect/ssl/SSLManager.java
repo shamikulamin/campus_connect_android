@@ -252,7 +252,7 @@ public class SSLManager {
 	
 	public String getHostName()
 	{
-		return "https://" + m_sServerIP + "/HibernateProject-1.0-SNAPSHOT/";
+		return "https://" + m_sServerIP + "/HibernateProject/";
 	}
 	
 	public String getLDAPName() {
