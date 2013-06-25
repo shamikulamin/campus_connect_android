@@ -77,7 +77,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 		
 		HttpClient httpClient = new DefaultHttpClient();
 		Log.v("In onRegistered","regId: "+regId);
-		HttpPost httpPost = new HttpPost("http://"+IP_Address+":8084/HibernateProject/Register");
+		HttpPost httpPost = new HttpPost("http://"+IP_Address+":8080/CampusConnectServer/gcmRegister");
 		ArrayList<NameValuePair> postParameters = new ArrayList<NameValuePair>();
 		postParameters.add(new BasicNameValuePair("regID", regId));
 		UrlEncodedFormEntity formEntity = null;
@@ -107,7 +107,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 		/* This method receives registrationID after user unregisters: should be sent to OUR server for deletion from storage */
 		
 		HttpClient httpClient = new DefaultHttpClient();
-		HttpPost httpPost = new HttpPost("http://"+IP_Address+":8084/Test1/Unregister");
+		HttpPost httpPost = new HttpPost("http://"+IP_Address+":8080/CampusConnectServer/gcmUnregister");
 		
 		ArrayList<NameValuePair> postParameters = new ArrayList<NameValuePair>();
 		postParameters.add(new BasicNameValuePair("regID", regId));
