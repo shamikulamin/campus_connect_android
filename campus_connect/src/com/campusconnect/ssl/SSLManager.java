@@ -68,56 +68,48 @@ public class SSLManager {
 	{
 		CommunityMsg comMsg = new CommunityMsg();
 		try {
-			String response = getResponse("get","getMsgById@" + msgID);
-			//JSONArray jsonArray = new JSONArray(response);
-			//Log.i(ServerConnector.class.getName(),
-			//		"Number of entries " + jsonArray.length());
-			//for (int i = 0; i < jsonArray.length(); i++) {
-				JSONObject jsonObject =  new JSONObject(response);
+			String response = getResponse("getMsgById", "/" + msgID); // Note: we need the slash because of how getResponse function handles the second parameter
+			JSONObject jsonObject =  new JSONObject(response);
 				
-				//CommunityMsg comMsg = new CommunityMsg();
-				if(jsonObject.has("comm_msg_id"))
-					comMsg.setCommMsgId(jsonObject.getInt("comm_msg_id"));
-				else
-				{
-					// this should not happen as its the primary key.
-					comMsg.setCommMsgId(-1);
+			if(jsonObject.has("comm_msg_id"))
+				comMsg.setCommMsgId(jsonObject.getInt("comm_msg_id"));
+			else
+			{
+				// this should not happen as its the primary key.
+				comMsg.setCommMsgId(-1);
+				
+			}
+			if(jsonObject.has("msg_type"))
+			{
+				comMsg.setMsgType(jsonObject.getString("msg_type"));					
+			}
+			else
+				comMsg.setMsgType(null);
+			
+			if(jsonObject.has("latlong"))					
+				comMsg.setLatLong(jsonObject.getString("latlong"));
+			else
+				comMsg.setLatLong(null);
+			
+			if(jsonObject.has("msg_description"))
+				comMsg.setMsgDescription(jsonObject.getString("msg_description"));
+			else
+				comMsg.setMsgDescription(null);
+			
+			if(jsonObject.has("msg_title"))
+				comMsg.setMsgTitle(jsonObject.getString("msg_title"));
+			else
+				comMsg.setMsgTitle(null);
+			
+			if(jsonObject.has("reporting_time"))
+				comMsg.setReportingTime(jsonObject.getString("reporting_time"));
+			else
+				comMsg.setReportingTime(null);
 					
-				}
-				if(jsonObject.has("msg_type"))
-				{
-					comMsg.setMsgType(jsonObject.getString("msg_type"));					
-				}
-				else
-					comMsg.setMsgType(null);
-				
-				if(jsonObject.has("latlong"))					
-					comMsg.setLatLong(jsonObject.getString("latlong"));
-				else
-					comMsg.setLatLong(null);
-				
-				if(jsonObject.has("msg_description"))
-					comMsg.setMsgDescription(jsonObject.getString("msg_description"));
-				else
-					comMsg.setMsgDescription(null);
-				
-				if(jsonObject.has("msg_title"))
-					comMsg.setMsgTitle(jsonObject.getString("msg_title"));
-				else
-					comMsg.setMsgTitle(null);
-				
-				if(jsonObject.has("reporting_time"))
-					comMsg.setReportingTime(jsonObject.getString("reporting_time"));
-				else
-					comMsg.setReportingTime(null);
-						
-				if(jsonObject.has("expiry_time"))
-					comMsg.setExpiryTime(jsonObject.getString("reporting_time"));
-				else
-					comMsg.setExpiryTime(null);
-				
-				//asRet.add(comMsg);
-			//}
+			if(jsonObject.has("expiry_time"))
+				comMsg.setExpiryTime(jsonObject.getString("reporting_time"));
+			else
+				comMsg.setExpiryTime(null);
 		} catch (ConnectTimeoutException e) {
 			throw e;
 		} catch (Exception e) {
@@ -130,10 +122,9 @@ public class SSLManager {
 	{
 		ArrayList<CommunityMsg> asRet = new ArrayList<CommunityMsg>();
 		try {
-			String response = getResponse("get","getCommunityMsg");
+			String response = getResponse("getCommunityMsg",""); // Note the empty string is needed because we are not passing an id to this method in the servlet
 			JSONArray jsonArray = new JSONArray(response);
-			Log.i(ServerConnector.class.getName(),
-					"Number of entries " + jsonArray.length());
+			Log.i(ServerConnector.class.getName(), "Number of entries " + jsonArray.length());
 			for (int i = 0; i < jsonArray.length(); i++) {
 				JSONObject jsonObject = jsonArray.getJSONObject(i);
 				
@@ -192,10 +183,9 @@ public class SSLManager {
 	{
 		ArrayList<CommunityMsg> asRet = new ArrayList<CommunityMsg>();
 		try {
-			String response = getResponse("get","getCommunityMsgForMap");
+			String response = getResponse("getCommunityMsgForMap","");
 			JSONArray jsonArray = new JSONArray(response);
-			Log.i(ServerConnector.class.getName(),
-					"Number of entries " + jsonArray.length());
+			Log.i(ServerConnector.class.getName(),"Number of entries " + jsonArray.length());
 			for (int i = 0; i < jsonArray.length(); i++) {
 				JSONObject jsonObject = jsonArray.getJSONObject(i);
 				
@@ -252,14 +242,14 @@ public class SSLManager {
 	
 	public String getHostName()
 	{
-		return "https://" + m_sServerIP + "/HibernateProject/";
+		return "https://" + m_sServerIP + "/CampusConnectServer/campus_connect_android/";
 	}
 	
 	public String getLDAPName() {
-		return getHostName() + "LDAPServlet";
+		return getHostName() + "login";
 	}
 	
-	private String getResponse(String sParamName, String sParamVal) throws ConnectTimeoutException
+	private String getResponse(String sFunctionName, String sIdParam) throws ConnectTimeoutException
 	{
 		HttpParams httpParameters = new BasicHttpParams();
 		
@@ -269,13 +259,11 @@ public class SSLManager {
 		HttpConnectionParams.setSoTimeout(httpParameters, socketTimeout);
 	
 		HttpClient httpclient = new CCHttpClient(this.ctx, httpParameters);
-		HttpGet httpget = new HttpGet(getHostName() + "campus_connect_servlet?" + sParamName + "=" + sParamVal); 
+		HttpPost httppost = new HttpPost(getHostName() + sFunctionName + "/" + sIdParam); // Note: sIdParam most of the time will simply be ""
 	
-		// Create a response handler
-		//ResponseHandler<String> responseHandler = new BasicResponseHandler();   
 		StringBuilder builder = new StringBuilder();
 		try {			
-			HttpResponse response = httpclient.execute(httpget);
+			HttpResponse response = httpclient.execute(httppost);
 			StatusLine statusLine = response.getStatusLine();
 			int statusCode = statusLine.getStatusCode();
 			
@@ -361,7 +349,7 @@ public class SSLManager {
 			HttpConnectionParams.setSoTimeout(httpParameters, socketTimeout);
 			
 			HttpClient httpClient = new CCHttpClient(this.ctx, httpParameters);
-			HttpPost httpPost = new HttpPost(getHostName()+"campus_connect_servlet");
+			HttpPost httpPost = new HttpPost(getHostName()+"campus_connect_servlet/sendReport/");
 			httpPost.setEntity(entity);
 			
 			HttpResponse servletResponse = httpClient.execute(httpPost);
