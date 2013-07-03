@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" 
+    android:background="@drawable/background_home"
+    >
+    
+    <!--<ImageView
+    
+    android:layout_width="fill_parent"
+    android:layout_height="0dip"
+    android:layout_weight="40"
+    android:background="@drawable/background_top"
+  />-->
+    <Button
+    android:id="@+id/security_escort"
+    android:layout_width="fill_parent"
+    android:layout_height="0dip"
+    android:layout_weight="25"
+    android:padding="20dip"
+    android:background="@drawable/selector_btn_security_escort"
+  />
+  <Button
+    android:id="@+id/lost_and_found"
+    android:layout_width="fill_parent"
+    android:layout_height="0dip"
+    android:layout_weight="25"
+    android:padding="20dip"
+    android:background="@drawable/selector_btn_lost_and_found"
+  />
+  <Button
+    android:id="@+id/parking_service"
+    android:layout_width="fill_parent"
+    android:layout_height="0dip"
+    android:layout_weight="25"
+    android:padding="20dip"
+    android:background="@drawable/selector_btn_parking_service"
+  />
+  <Button
+    android:id="@+id/police_dispatch"
+    android:layout_width="fill_parent"
+    android:layout_height="0dip"
+    android:layout_weight="25"
+    android:padding="20dip"
+    android:background="@drawable/selector_btn_police_dispatch"
+  />
+</LinearLayout>
