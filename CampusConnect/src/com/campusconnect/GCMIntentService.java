@@ -18,7 +18,9 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v4.app.NotificationCompat;
+import android.util.Base64;
 import android.util.Log;
 
 import com.google.android.gcm.GCMBaseIntentService;
@@ -74,10 +76,21 @@ public class GCMIntentService extends GCMBaseIntentService {
 	@Override
 	protected void onRegistered(Context context, String regId) {
 		/* This method receives registrationID: and is sent to OUR server for storage */
+
+		/* Get SharedPreferences to see if we already have set a user/pass combo */
+    	SharedPreferences sp = this.getSharedPreferences("prefs", MODE_PRIVATE);
+    	
+    	// We do not pass the push notification parameters to startLoginActivity() since it will be called only once at the first time after installing.
+    	/* Variable stored in SharedPreference: uid = encrypted UTA ID, p = encrypted UTA password */
+    	String enc_user = sp.getString("uid", "");
+    	String enc_pass = sp.getString("p", "");
 		
-		HttpClient httpClient = new DefaultHttpClient();
-		Log.v("In onRegistered","regId: "+regId);
-		HttpPost httpPost = new HttpPost("http://"+IP_Address+":8080/CampusConnectServer/gcmRegister");
+    	HttpClient httpClient = new DefaultHttpClient();
+		HttpPost httpPost = new HttpPost("http://"+IP_Address+":8080/CampusConnectServer/campus_connect_android/gcmRegister");
+		String toSend = enc_user+":"+enc_pass;
+		String authStr = "Basic " + Base64.encodeToString(toSend.getBytes(), Base64.NO_WRAP);
+		httpPost.setHeader("Authorization",authStr);
+		
 		ArrayList<NameValuePair> postParameters = new ArrayList<NameValuePair>();
 		postParameters.add(new BasicNameValuePair("regID", regId));
 		UrlEncodedFormEntity formEntity = null;
@@ -106,8 +119,19 @@ public class GCMIntentService extends GCMBaseIntentService {
 	protected void onUnregistered(Context context, String regId) {
 		/* This method receives registrationID after user unregisters: should be sent to OUR server for deletion from storage */
 		
+		/* Get SharedPreferences to see if we already have set a user/pass combo */
+    	SharedPreferences sp = this.getSharedPreferences("prefs", MODE_PRIVATE);
+    	
+    	// We do not pass the push notification parameters to startLoginActivity() since it will be called only once at the first time after installing.
+    	/* Variable stored in SharedPreference: uid = encrypted UTA ID, p = encrypted UTA password */
+    	String enc_user = sp.getString("uid", "");
+    	String enc_pass = sp.getString("p", "");
+		
 		HttpClient httpClient = new DefaultHttpClient();
-		HttpPost httpPost = new HttpPost("http://"+IP_Address+":8080/CampusConnectServer/gcmUnregister");
+		HttpPost httpPost = new HttpPost("http://"+IP_Address+":8080/CampusConnectServer/campus_connect_android/gcmUnregister");
+		String toSend = enc_user+":"+enc_pass;
+		String authStr = "Basic " + Base64.encodeToString(toSend.getBytes(), Base64.NO_WRAP);
+		httpPost.setHeader("Authorization",authStr);
 		
 		ArrayList<NameValuePair> postParameters = new ArrayList<NameValuePair>();
 		postParameters.add(new BasicNameValuePair("regID", regId));

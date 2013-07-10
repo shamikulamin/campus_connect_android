@@ -357,8 +357,12 @@ public class SSLManager {
 			HttpConnectionParams.setSoTimeout(httpParameters, socketTimeout);
 			
 			HttpClient httpClient = new CCHttpClient(this.ctx, httpParameters);
-			HttpPost httpPost = new HttpPost(getHostName()+"campus_connect_servlet/sendReport/");
+			HttpPost httpPost = new HttpPost(getHostName()+"sendReport");
 			httpPost.setEntity(entity);
+			
+			String toSend = enc_user+":"+enc_pass;
+			String authStr = "Basic " + Base64.encodeToString(toSend.getBytes(), Base64.NO_WRAP);
+			httpPost.setHeader("Authorization",authStr);
 			
 			HttpResponse servletResponse = httpClient.execute(httpPost);
 			
