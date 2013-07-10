@@ -259,8 +259,8 @@ public class StartScreen extends Activity {
 			        	Intent vMsgDetailIntent = null;
 			        	m_vPushedComMsg = getCommMsgFromPush(m_iMsgID,ctx, enc_uid, enc_pass);
 			        	/* Check if this msg has a location */
-			    		String loc = m_vPushedComMsg.getLatLong();//intent.getStringExtra("location");
-			    		if( loc != null )//loc != null && !loc.equals("") )
+			    		String loc = m_vPushedComMsg.getLatLong();
+			    		if( loc != null && !loc.equals("none") )
 			    		{
 			    			vMsgDetailIntent = new Intent(ctx,ComMsgMapDetailsActivity.class);
 			    			//vMsgDetailIntent.setClass(this, CommValidMsgMapActivity.class);

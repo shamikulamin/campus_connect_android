@@ -73,7 +73,7 @@ public class SSLManager {
 	{
 		CommunityMsg comMsg = new CommunityMsg();
 		try {
-			String response = getResponse("getMsgById", "/" + msgID); // Note: we need the slash because of how getResponse function handles the second parameter
+			String response = getResponse("getCommunityMsgById", "/" + msgID); // Note: we need the slash because of how getResponse function handles the second parameter
 			JSONObject jsonObject =  new JSONObject(response);
 				
 			if(jsonObject.has("comm_msg_id"))
