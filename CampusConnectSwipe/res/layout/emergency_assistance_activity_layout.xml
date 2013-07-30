@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" 
+    android:background="@drawable/background_home" >
+    
+    <TextView 
+	    android:layout_width="fill_parent" 
+		android:layout_height="0dp"
+		android:layout_weight="10"
+		android:layout_marginLeft="20dip"
+		android:layout_marginRight="20dip"
+		android:gravity="center|center_vertical"
+		android:text="WARNING: In case of a real emergency please call 911."
+		android:background="@android:color/holo_red_light"
+		android:textStyle="bold" />
+    
+    <LinearLayout 
+    android:layout_width="fill_parent"
+    android:layout_height="0dp"
+    android:layout_weight="45"
+    android:orientation="horizontal" >
+    
+      	<Button
+	    	android:id="@+id/security_escort"
+	    	android:layout_width="0dp"
+	    	android:layout_height="fill_parent"
+	    	android:layout_weight="50"
+	    	android:layout_marginTop="10dip"
+	    	android:layout_marginLeft="20dip"
+	    	android:layout_marginRight="10dip"
+	    	android:layout_marginBottom="10dip"
+	    	android:drawableTop="@drawable/sec_escort"
+	    	android:background="@drawable/selector_blue_button"
+	    	android:paddingTop="32sp"
+	    	android:textColor="#FFFFFF"
+	    	android:text="Security Escort" />
+	  	<Button
+	  		android:id="@+id/lost_and_found"
+	    	android:layout_width="0dip"
+	    	android:layout_height="fill_parent"
+	    	android:layout_weight="50"
+	    	android:layout_marginTop="10dip"
+    		android:layout_marginLeft="10dip"
+    		android:layout_marginRight="20dip"
+    		android:layout_marginBottom="10dip"
+    		android:drawableTop="@drawable/lost_and_found"
+	    	android:background="@drawable/selector_blue_button"
+	    	android:paddingTop="32sp"
+	    	android:textColor="#FFFFFF"
+	    	android:text="Lost and Found" />
+    </LinearLayout>
+    <LinearLayout 
+        android:layout_width="fill_parent"
+    	android:layout_height="0dp"
+    	android:layout_weight="45"
+    	android:orientation="horizontal" >
+		<Button
+	   		android:id="@+id/parking_service"
+	   		android:layout_width="0dp"
+	   		android:layout_height="fill_parent"
+	    	android:layout_weight="50"
+	    	android:layout_marginTop="10dip"
+	    	android:layout_marginLeft="20dip"
+	    	android:layout_marginRight="10dip"
+	    	android:layout_marginBottom="10dip"
+	    	android:drawableTop="@drawable/parking"
+	    	android:background="@drawable/selector_blue_button"
+	    	android:paddingTop="32sp"
+	    	android:textColor="#FFFFFF"
+	    	android:text="Parking Services" />
+	  	<Button
+	    	android:id="@+id/police_dispatch"
+	    	android:layout_width="0dp"
+	    	android:layout_height="fill_parent"
+	    	android:layout_weight="50"
+	    	android:layout_marginTop="10dip"
+	    	android:layout_marginLeft="10dip"
+	    	android:layout_marginRight="20dip"
+	    	android:layout_marginBottom="10dip"
+	    	android:drawableTop="@drawable/police_disp"
+	    	android:background="@drawable/selector_blue_button"
+	    	android:paddingTop="32sp"
+	    	android:textColor="#FFFFFF"
+	    	android:text="Police Dispatch" />
+    </LinearLayout>
+</LinearLayout>

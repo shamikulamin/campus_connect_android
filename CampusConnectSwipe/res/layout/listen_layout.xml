@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="horizontal"
+    android:fillViewport="true" >
+    
+    <Button 
+    	android:id="@+id/buttonlisten" 
+    	android:layout_width="fill_parent" 
+    	android:layout_height="fill_parent"
+    	android:paddingLeft="100dip"
+    	android:paddingRight="100dip"
+    	android:drawableRight="@drawable/microphone"
+    	android:text="Start Listening" 
+    	android:fillViewport="true"
+    	android:background="@drawable/listen_background" />
+    
+    <!--<TextView  
+    	android:layout_width="fill_parent" 
+    	android:text="Start Listening" 
+    	android:layout_height="wrap_content"
+    	android:drawableRight="@drawable/microphone"/>-->
+
+    <!--<ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/microphone" />-->
+ 
+</LinearLayout>

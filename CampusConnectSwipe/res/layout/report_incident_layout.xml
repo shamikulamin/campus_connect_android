@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/report"
+ 	android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:descendantFocusability="beforeDescendants"
+	android:focusableInTouchMode="true"
+	android:background="@drawable/shape2">
+	
+	<TextView 
+	    android:layout_width="fill_parent" 
+		android:layout_height="0dp"
+		android:layout_weight="15"
+		android:layout_marginLeft="20dip"
+		android:layout_marginRight="20dip"
+		android:gravity="center|center_vertical"
+		android:text="WARNING: Reports are sent to the police. Any reports that are not truthful can lead to punishment under the law."
+		android:background="@android:color/holo_red_light"
+		android:textStyle="bold" />
+	
+	<TextView 
+	    android:layout_width="fill_parent" 
+		android:layout_height="0dp"
+		android:layout_weight="5"
+		android:layout_marginLeft="20dip"
+		android:layout_marginRight="20dip"
+		android:gravity="center|bottom"
+		android:text="Incident Report"
+		android:textStyle="bold" />
+	
+	<FrameLayout
+    	android:id="@+id/frameLayoutValueContainer"
+    	android:layout_width="fill_parent"
+    	android:layout_height="0dp"
+    	android:layout_weight="50"
+    	android:layout_marginTop="5dip"
+    	android:layout_marginLeft="20dip"
+    	android:layout_marginRight="20dip"
+    	android:layout_marginBottom="0dip"
+    	android:padding="1dp"
+    	android:background="@android:color/black" >
+	
+	    <EditText
+	        android:id="@+id/msgdetails"
+			android:scrollbars = "vertical"
+	        android:layout_width="fill_parent"
+	        android:gravity="top|left" 
+	        android:padding="10dip"
+	        android:hint="Enter Incident Report details here..."
+	        android:layout_height="fill_parent"
+	        android:textColor="#000000"
+	        android:background="#C7C7C7" />
+    </FrameLayout>
+
+    <!--<Button
+        android:id="@+id/add_image"
+        android:layout_width="fill_parent"
+    	android:layout_height="0dip"    
+        android:layout_weight = "15"    
+        android:background="@drawable/selector_blue_button" />-->
+    <!--<ImageButton
+        android:id="@+id/add_image"
+        android:layout_width="match_parent"
+        android:contentDescription="Camera"
+        android:text="Add Image"
+    	android:layout_height="0dip"    
+        android:layout_weight = "15"
+        android:src="@drawable/camera"
+        android:background="@drawable/selector_blue_button" />-->
+        
+    <LinearLayout  
+    	android:id="@+id/report"
+ 		android:orientation="horizontal"
+    	android:layout_width="fill_parent"
+    	android:layout_height="0dip"
+    	android:layout_weight="30" >
+	     <Button
+	        android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="30"
+	        android:layout_marginLeft="20dip"
+	        android:layout_marginTop="10dip"
+	        android:layout_marginBottom="10dip"
+	        android:background="@drawable/selector_blue_button"
+	        android:drawableTop="@drawable/camera"
+	        android:textColor="#FFFFFF"
+	        android:id="@+id/add_image"
+	        android:paddingTop="32sp"
+	        android:text="Add an Image"/>
+	     
+	     <Button
+	        android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="30"
+	        android:layout_marginLeft="10dip"
+	        android:layout_marginTop="10dip"
+	        android:layout_marginBottom="10dip"
+	        android:background="@drawable/selector_blue_button"
+	        android:drawableTop="@drawable/images"
+	        android:textColor="#FFFFFF"
+	        android:id="@+id/viewCapturedImages"
+	        android:paddingTop="32sp"
+	        android:text="View Images"/>
+	     
+	     <Button
+	        android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="30"
+	        android:layout_marginLeft="10dip"
+	        android:layout_marginTop="10dip"
+	        android:layout_marginRight="20dip"
+	        android:layout_marginBottom="10dip"
+	        android:background="@drawable/selector_blue_button"
+	        android:drawableTop="@drawable/send"
+	        android:textColor="#FFFFFF"
+	        android:id="@+id/btnSendReport"
+	        android:paddingTop="32sp"
+	        android:text="Send Report"/>
+	
+	    <!--<Button
+	       	android:id="@+id/viewCapturedImages"
+	        android:layout_width="fill_parent"
+	    	android:layout_height="0dip"
+	        android:layout_weight="15"    
+	        android:background="@drawable/selector_btn_view_image"/>
+	    
+	    <Button
+	       	android:id="@+id/btnSendReport"
+	        android:layout_width="fill_parent"
+	        android:layout_height="0dip"        
+	        android:layout_weight="15"
+	        android:background="@drawable/selector_btn_send_report"/>-->
+    </LinearLayout>
+      
+</LinearLayout>

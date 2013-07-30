@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" android:title="Preferences">
+
+  <PreferenceCategory android:title="Options">
+     <CheckBoxPreference
+       android:key="push_notification_on"
+       android:title="Receive Push Notifications"
+       android:summary="Tick to receive push notifications"
+       android:defaultValue="true" />
+    <!--<CheckBoxPreference
+       android:key="pref_opt2"
+       android:title="Option 2"
+       android:summary="Tick to set this option"
+       android:defaultValue="true" />-->
+  </PreferenceCategory>
+  
+  <PreferenceCategory android:title="Timing">
+     <ListPreference
+        android:key="help_word_listen_time"
+        android:title="Help Word Listen Time"
+        android:summary="Select how long to listen for your help word"
+        android:entries="@array/times"
+        android:entryValues="@array/time_values"
+        android:defaultValue="5" />
+     <ListPreference
+        android:key="help_word_recording_time"
+        android:title="Help Word Recording Time"
+        android:summary="Select how long the recording should be after hearing your help word"
+        android:entries="@array/recording_times"
+        android:entryValues="@array/recording_time_values"
+        android:defaultValue="30" />
+  </PreferenceCategory>
+
+  <PreferenceCategory android:title="Help Word">
+      
+    <ListPreference
+        android:key="help_word"
+        android:title="Help Word"
+        android:summary="Select word to listen for when you need help"
+        android:entries="@array/help_types"
+        android:entryValues="@array/help_types_values"
+        android:defaultValue="help" />
+
+    <!--<EditTextPreference
+        android:key="pref_text"
+        android:title="Input text"
+        android:summary="Tap to enter some text"
+        android:dialogTitle="Enter text" />-->
+     
+  </PreferenceCategory>
+
+  <!--<Preference
+    android:title="Intent"
+    android:summary="Open a webpage">
+
+    <intent
+      android:action="android.intent.action.VIEW"
+      android:data="http://android-elements.blogspot.com/" />
+
+  </Preference>-->
+   
+</PreferenceScreen>
