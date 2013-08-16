@@ -5,6 +5,8 @@ import java.util.ArrayList;
 
 import android.content.Context;
 import android.content.Intent;
+import android.media.AudioManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -28,11 +30,13 @@ public class WordActivator implements SpeechActivator, RecognitionListener {
     protected volatile boolean mIsCountDownOn;
     protected Intent mSpeechRecognizerIntent;
     protected final Messenger mServerMessenger = new Messenger(new IncomingHandler(this));
+    protected AudioManager mAudioManager; 
 
     static final int MSG_RECOGNIZER_START_LISTENING = 1;
     static final int MSG_RECOGNIZER_CANCEL = 2;
 	
     public WordActivator(Context context, SpeechActivationListener resultListener, String helpWord) {
+    	this.mAudioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE); 
         this.context = context;
         this.resultListener = resultListener;
         this.helpWord = helpWord;
@@ -88,10 +92,10 @@ public class WordActivator implements SpeechActivator, RecognitionListener {
 			switch (msg.what) {
 				case MSG_RECOGNIZER_START_LISTENING:
 	
-					//if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
 						// turn off beep sound  
-					//	target.mAudioManager.setStreamMute(AudioManager.STREAM_SYSTEM, true);
-					//}
+						target.mAudioManager.setStreamMute(AudioManager.STREAM_SYSTEM, true);
+					}
 					if (!target.mIsListening) {
 						target.getSpeechRecognizer().startListening(target.mSpeechRecognizerIntent);
 						target.mIsListening = true;
