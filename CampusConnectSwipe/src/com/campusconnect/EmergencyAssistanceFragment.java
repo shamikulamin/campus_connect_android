@@ -10,10 +10,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 public class EmergencyAssistanceFragment extends Fragment {
-	private static String SECURITY_ESCORT_NUM_URI = "tel:+651234567";
-	private static String LOSTANDFOUND_NUM_URI = "tel:+651234567";
-	private static String PARKING_SERVICE_NUM_URI = "tel:+651234567";
-	private static String POLICE_DISPATCH_NUM_URI = "tel:+651234567";
+	private static String SECURITY_ESCORT_NUM_URI = "tel:+8172723381";
+	private static String LOSTANDFOUND_NUM_URI = "tel:+8172722904";
+	private static String PARKING_SERVICE_NUM_URI = "tel:+8172723907";
+	private static String POLICE_DISPATCH_NUM_URI = "tel:+817272381";
 
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

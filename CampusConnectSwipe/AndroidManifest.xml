@@ -59,6 +59,7 @@
             android:name="com.campusconnect.login.LoginActivity"
             android:label="Login"
             android:parentActivityName="com.campusconnect.StartScreen" 
+            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Holo.Light.NoActionBar"
             android:windowSoftInputMode="adjustPan">
             <meta-data

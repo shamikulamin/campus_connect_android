@@ -219,6 +219,7 @@ public class StartScreen extends FragmentActivity {
             if (resultCode == RESULT_OK) {
             	enc_user = data.getStringExtra("enc_user");
             	enc_pass = data.getStringExtra("enc_pass");
+            	StartScreen.this.getActionBar().setSelectedNavigationItem(0);
             }
         }
     }
