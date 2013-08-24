@@ -22,6 +22,7 @@ import android.location.LocationManager;
 import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -230,15 +231,27 @@ public class HelpWordReportService extends Service implements LocationListener {
         PendingIntent cancelpi = PendingIntent.getService(this, (int)System.currentTimeMillis(), canceli, PendingIntent.FLAG_UPDATE_CURRENT);
         mNotifyManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 		mBuilder = new NotificationCompat.Builder(this);
-        return 	mBuilder
-		        .setSmallIcon(R.drawable.icon)
-		        .setContentTitle("Recording...")
-		        .setContentText("Recording audio for report.\n Click cancel to cancel this report.")
-		        .setContentIntent(pi)
-		        .setPriority(Notification.PRIORITY_MAX)
-		        .addAction(android.R.drawable.ic_menu_close_clear_cancel,"Cancel", cancelpi)
-		        .setLights(Color.parseColor("blue"), 1000, 1000)
-		        .build();
+		
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+			 return mBuilder
+				        .setSmallIcon(R.drawable.icon)
+				        .setContentTitle("Recording...")
+				        .setContentText("Recording audio for report.\n Click cancel to cancel this report.")
+				        .setContentIntent(pi)
+				        .setPriority(Notification.PRIORITY_MAX)
+				        .addAction(android.R.drawable.ic_menu_close_clear_cancel,"Cancel", cancelpi)
+				        .setLights(Color.parseColor("blue"), 1000, 1000)
+				        .build();
+        } else {
+        	 return mBuilder
+     		        .setSmallIcon(R.drawable.icon)
+     		        .setContentTitle("Recording...")
+     		        .setContentText("Recording audio for report.\n Click this to cancel.")
+     		        .setContentIntent(cancelpi)
+     		        .setPriority(Notification.PRIORITY_MAX)
+     		        .setLights(Color.parseColor("blue"), 1000, 1000)
+     		        .build();
+        }
 	}
 	
 	private void cancelReport() {

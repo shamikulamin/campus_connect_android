@@ -7,6 +7,8 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.AudioManager;
+import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Vibrator;
@@ -142,12 +144,23 @@ public class ListenService extends Service implements SpeechActivationListener {
         canceli.putExtra(ACTIVATION_STOP_INTENT_KEY, "");
         PendingIntent cancelpi = PendingIntent.getService(this, (int)System.currentTimeMillis(), canceli, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        return new NotificationCompat.Builder(this)
-		        .setSmallIcon(R.drawable.icon)
-		        .setContentTitle("Listening...")
-		        .setContentText("Listening for your help word")
-		        .setContentIntent(pi)
-		        .addAction(android.R.drawable.ic_menu_close_clear_cancel,"Stop Listening", cancelpi)
-		        .build();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+	        return new NotificationCompat.Builder(this)
+			        .setSmallIcon(R.drawable.icon)
+			        .setContentTitle("Listening...")
+			        .setContentText("Listening for your help word")
+			        .setContentIntent(pi)
+			        .addAction(android.R.drawable.ic_menu_close_clear_cancel,"Stop Listening", cancelpi)
+			        .setPriority(Notification.PRIORITY_MAX)
+			        .build();
+        } else {
+        	return new NotificationCompat.Builder(this)
+			        .setSmallIcon(R.drawable.icon)
+			        .setContentTitle("Listening...")
+			        .setContentText("Click this to cancel")
+			        .setContentIntent(cancelpi)
+			        .setPriority(Notification.PRIORITY_MAX)
+			        .build();
+        }
 	 }
 }
