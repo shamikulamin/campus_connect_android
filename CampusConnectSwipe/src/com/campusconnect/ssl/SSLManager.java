@@ -44,7 +44,7 @@ import com.campusconnect.ServerConnector;
 import com.campusconnect.login.UpdateException;
 
 public class SSLManager {
-	private static final String m_sServerIP = "129.107.116.135:8443";
+	private static final String m_sServerIP = "129.107.119.209:8448";
 	private static final int connectionTimeout = 5000, socketTimeout = 5000;
 	public static final int IMAGE_DIRECTORY_TYPE = 0;
 	public static final int RECORDING_DIRECTORY_TYPE = 1;

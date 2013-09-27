@@ -70,6 +70,7 @@ public class CCHttpClient extends DefaultHttpClient {
             inputStream.close();
 
             ret = new SSLSocketFactory(ks);
+            ret.setHostnameVerifier(SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
         } catch (UnrecoverableKeyException ex) {
             Log.d(TAG, ex.getMessage());
         } catch (KeyStoreException ex) {
